@@ -1,0 +1,17 @@
+UpdateEmployeeInformation
+GetEmployeesByDepartment
+DeleteEmployee
+GetAllEmployees
+GetEmployeeById
+CreateEmployee
+GetEmployeesByDesignation
+GetAllDepartments
+GetDepartmentById
+CreateDepartment
+UpdateDepartment
+DeleteDepartment
+CreateDesignation
+GetAllDesignations
+GetDesignationById
+UpdateDesignation
+DeleteDesignation
