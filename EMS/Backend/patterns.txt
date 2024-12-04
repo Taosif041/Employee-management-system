@@ -1,0 +1,101 @@
+EmployeeManagementSystem/
+│
+├── Controllers/                      # Handles HTTP requests/responses
+│   ├── EmployeeController.cs
+│   ├── DepartmentController.cs
+│   ├── DesignationController.cs
+│   ├── AttendanceController.cs      # For attendance management in PostgreSQL
+│   ├── OperationLogController.cs    # For logging operations in MongoDB
+│
+├── Repositories/                     # Data access logic (repository pattern)
+│   ├── Interfaces/
+│   │   ├── IEmployeeRepository.cs
+│   │   ├── IDepartmentRepository.cs
+│   │   ├── IDesignationRepository.cs
+│   │   ├── IOperationLogRepository.cs        # MongoDB
+│   │   ├── IAttendanceRepository.cs          # PostgreSQL
+│   ├── Implementations/
+│   │   ├── EmployeeRepository.cs
+│   │   ├── DepartmentRepository.cs
+│   │   ├── DesignationRepository.cs
+│   │   ├── OperationLogRepository.cs        # MongoDB
+│   │   ├── AttendanceRepository.cs          # PostgreSQL
+│   ├── Factory/                         # Factory Pattern for creating repositories dynamically
+│   │   ├── RepositoryFactory.cs
+│   ├── UnitOfWork/                      # Unit of Work pattern to manage DB transactions
+│   │   ├── IUnitOfWork.cs
+│   │   ├── UnitOfWork.cs
+│
+├── Data/                               # Database contexts for each database
+│   ├── Contexts/                       
+│   │   ├── SqlServerContext.cs           # SQL Server
+│   │   ├── MongoDbContext.cs             # MongoDB
+│   │   ├── PostgreSqlContext.cs          # PostgreSQL
+│   ├── DatabaseSettings.cs              # Configurations for multi-database setup
+│
+├── Services/                            # Business logic layer (service pattern)
+│   ├── Interfaces/
+│   │   ├── IEmployeeService.cs
+│   │   ├── IDepartmentService.cs
+│   │   ├── IDesignationService.cs
+│   │   ├── IOperationLogService.cs           # MongoDB
+│   │   ├── IAttendanceService.cs             # PostgreSQL
+│   ├── Implementations/
+│   │   ├── EmployeeService.cs
+│   │   ├── DepartmentService.cs
+│   │   ├── DesignationService.cs
+│   │   ├── OperationLogService.cs           # MongoDB
+│   │   ├── AttendanceService.cs             # PostgreSQL
+│   ├── Strategy/                        # Strategy Pattern for different business logic (e.g., salary calculation)
+│   │   ├── ISalaryCalculationStrategy.cs
+│   │   ├── HourlySalaryCalculation.cs
+│   │   ├── MonthlySalaryCalculation.cs
+│
+├── Models/                              # Domain models and database entities
+│   ├── Employee.cs
+│   ├── Department.cs
+│   ├── Designation.cs
+│   ├── OperationLog.cs                  # MongoDB
+│   ├── Attendance.cs                    # PostgreSQL
+│
+├── DTOs/                                # Data Transfer Objects for APIs
+│   ├── Employee/
+│   │   ├── EmployeeDto.cs
+│   │   ├── CreateEmployeeDto.cs
+│   │   ├── UpdateEmployeeDto.cs
+│   ├── Department/
+│   │   ├── DepartmentDto.cs
+│   │   ├── CreateDepartmentDto.cs
+│   │   ├── UpdateDepartmentDto.cs
+│   ├── Designation/
+│   │   ├── DesignationDto.cs
+│   │   ├── CreateDesignationDto.cs
+│   │   ├── UpdateDesignationDto.cs
+│   ├── OperationLog/
+│   │   ├── OperationLogDto.cs
+│   │   ├── CreateOperationLogDto.cs
+│   ├── Attendance/
+│       ├── AttendanceDto.cs
+│       ├── CreateAttendanceDto.cs
+│
+├── Mappers/                             # Manual mapping logic
+│   ├── EmployeeMapper.cs
+│   ├── DepartmentMapper.cs
+│   ├── DesignationMapper.cs
+│   ├── OperationLogMapper.cs            # MongoDB
+│   ├── AttendanceMapper.cs              # PostgreSQL
+│
+├── Middleware/                          # Custom middleware (e.g., error handling)
+│   ├── ErrorHandlingMiddleware.cs
+│
+├── Utilities/                           # Helpers and common utilities
+│   ├── DatabaseConnectionHelper.cs       # Unified helper for managing DB connections
+│   ├── LoggingHelper.cs                 # Log handling logic
+│
+├── Startup/                             # Application configuration
+│   ├── DependencyInjection.cs           # Registers services/repositories
+│   ├── Program.cs
+│   ├── Startup.cs
+│
+├── appsettings.json                     # Configuration settings (e.g., DB connections)
+├── EmployeeManagementSystem.sln         # Solution file

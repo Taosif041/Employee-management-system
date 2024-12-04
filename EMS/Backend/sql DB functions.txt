@@ -1,0 +1,28 @@
+UpdateEmployeeInformation
+DeleteEmployee
+GetAllEmployees
+GetEmployeeById
+CreateEmployee
+
+GetEmployeesByDepartment
+GetEmployeesByDesignation
+
+GetAllDepartments
+GetDepartmentById
+CreateDepartment
+UpdateDepartment
+DeleteDepartment
+
+CreateDesignation
+GetAllDesignations
+GetDesignationById
+UpdateDesignation
+DeleteDesignation
+
+{
+  "EmployeeId": 1002,
+  "Name": "John Updated",
+  "Phone": "1234567890",
+  "Address": "789 Oak Street, Gotham City, USA",
+  "Email": "john.updated@example.com"
+}
