@@ -12,10 +12,12 @@ namespace EMS.Repositories.Implementations
     public class EmployeeRepository : IEmployeeRepository
     {
         private readonly SqlConnection _connection;
+        private readonly IOperationLogRepository _operationLogRepository;
 
-        public EmployeeRepository(SqlConnection connection)
+        public EmployeeRepository(SqlConnection connection, IOperationLogRepository operationLogRepository)
         {
             _connection = connection;
+            _operationLogRepository = operationLogRepository;
         }
 
         public async Task<IEnumerable<Employee>> GetAllEmployeesAsync()
@@ -45,8 +47,19 @@ namespace EMS.Repositories.Implementations
         {
             await _connection.OpenAsync();
             var parameters = new { EmployeeId = employeeId };
-            return await _connection.QueryFirstOrDefaultAsync<Employee>("GetEmployeeById", parameters, commandType: CommandType.StoredProcedure);
 
+            var employees =  await _connection.QueryFirstOrDefaultAsync<Employee>("GetEmployeeById", parameters, commandType: CommandType.StoredProcedure);
+            
+            var log = new OperationLog
+            {
+                OperationType = "Read",
+                EntityName = "Employee",
+                EntityId = 0, // No specific entity ID for "Get All" operations
+                TimeStamp = DateTime.UtcNow,
+                OperationDetails = "Retrieved all employees"
+            };
+            await _operationLogRepository.LogOperationAsync(log);
+            return employees;
         }
 
         public async Task<Employee> CreateEmployeeAsync(Employee employee)

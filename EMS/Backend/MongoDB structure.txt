@@ -1,0 +1,5 @@
+OperationType (e.g., "CREATE", "UPDATE", "DELETE")
+EntityName (e.g., "Employee", "Department")
+EntityId (ID of the entity being modified)
+TimeStamp (DateTime of the operation)
+OperationDetails (Details of the operation, e.g., which fields were updated)
