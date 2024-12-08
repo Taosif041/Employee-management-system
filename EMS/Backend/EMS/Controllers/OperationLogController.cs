@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using static EMS.Data.Enums;
 
 namespace EMS.Controllers
 {
@@ -18,6 +19,7 @@ namespace EMS.Controllers
             _operationLogService = operationLogService;
         }
 
+        // Endpoint to get all logs
         [HttpGet]
         public async Task<IActionResult> GetAllLogsAsync()
         {
@@ -33,38 +35,25 @@ namespace EMS.Controllers
             }
         }
 
-        [HttpGet("employees")]
-        public async Task<IActionResult> GetEmployeeLogsAsync()
+        // Endpoint to get logs based on parameters (operationType, entityName, entityId)
+        [HttpGet("search")]
+        public async Task<IActionResult> GetLogsWithParametersAsync([FromQuery] string operationType = null,
+                                                                   [FromQuery] string entityName = null,
+                                                                   [FromQuery] int? entityId = null)
         {
             try
             {
-                var logs = await _operationLogService.GetEmployeeLogsAsync();
-                return Ok(logs);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error in GetEmployeeLogs: {ex.Message}");
-                return StatusCode(500, "An error occurred while retrieving the employee logs.");
-            }
-        }
-
-        [HttpGet("employees/{employeeId}")]
-        public async Task<IActionResult> GetLogsByEmployeeIdAsync(int employeeId)
-        {
-            try
-            {
-                var logs = await _operationLogService.GetLogsByEmployeeIdAsync(employeeId);
-                if (logs == null)
-                {
-                    return NotFound($"No logs found for employee with ID {employeeId}.");
-                }
+                var logs = await _operationLogService.GetLogsWithParametersAsync(
+                    operationType != null ? Enum.TryParse(operationType, out OperationType opType) ? opType : (OperationType?)null : null,
+                    entityName != null ? Enum.TryParse(entityName, out EntityName entName) ? entName : (EntityName?)null : null,
+                    entityId);
 
                 return Ok(logs);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in GetLogsByEmployeeId for employeeId {employeeId}: {ex.Message}");
-                return StatusCode(500, "An error occurred while retrieving the logs.");
+                Console.WriteLine($"Error in GetLogsWithParameters: {ex.Message}");
+                return StatusCode(500, "An error occurred while retrieving the logs with parameters.");
             }
         }
     }

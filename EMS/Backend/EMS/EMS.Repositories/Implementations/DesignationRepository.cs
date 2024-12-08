@@ -2,20 +2,24 @@
 using Microsoft.Data.SqlClient;
 using EMS.Models;
 using EMS.Repositories.Interfaces;
+using EMS.Helpers;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using System;
+using static EMS.Data.Enums;
 
 namespace EMS.Repositories.Implementations
 {
     public class DesignationRepository : IDesignationRepository
     {
         private readonly SqlConnection _connection;
+        private readonly OperationLogger _operationLogger;
 
-        public DesignationRepository(SqlConnection connection)
+        public DesignationRepository(SqlConnection connection, IOperationLogRepository operationLogRepository)
         {
             _connection = connection ?? throw new ArgumentNullException(nameof(connection), "Database connection cannot be null.");
+            _operationLogger = new OperationLogger(operationLogRepository);
         }
 
         public async Task<IEnumerable<Designation>> GetAllDesignationsAsync()
@@ -23,7 +27,11 @@ namespace EMS.Repositories.Implementations
             try
             {
                 await _connection.OpenAsync();
-                return await _connection.QueryAsync<Designation>("GetAllDesignations", commandType: CommandType.StoredProcedure);
+                var designations = await _connection.QueryAsync<Designation>("GetAllDesignations", commandType: CommandType.StoredProcedure);
+
+                await _operationLogger.LogOperationAsync(EntityName.Designation, 0, OperationType.GetAll);
+
+                return designations;
             }
             catch (SqlException sqlEx)
             {
@@ -42,7 +50,11 @@ namespace EMS.Repositories.Implementations
             {
                 await _connection.OpenAsync();
                 var parameters = new { DesignationId = designationId };
-                return await _connection.QueryFirstOrDefaultAsync<Designation>("GetDesignationById", parameters, commandType: CommandType.StoredProcedure);
+                var designation = await _connection.QueryFirstOrDefaultAsync<Designation>("GetDesignationById", parameters, commandType: CommandType.StoredProcedure);
+
+                await _operationLogger.LogOperationAsync(EntityName.Designation, designationId, OperationType.GetById);
+
+                return designation;
             }
             catch (Exception ex)
             {
@@ -67,6 +79,8 @@ namespace EMS.Repositories.Implementations
 
                 var newId = await _connection.ExecuteScalarAsync<int>("CreateDesignation", parameters, commandType: CommandType.StoredProcedure);
                 designation.DesignationId = newId;
+
+                await _operationLogger.LogOperationAsync(EntityName.Designation, newId, OperationType.Create);
 
                 return designation;
             }
@@ -102,6 +116,8 @@ namespace EMS.Repositories.Implementations
 
                 await _connection.ExecuteAsync("UpdateDesignation", parameters, commandType: CommandType.StoredProcedure);
 
+                await _operationLogger.LogOperationAsync(EntityName.Designation, designation.DesignationId, OperationType.Update);
+
                 return designation;
             }
             catch (SqlException sqlEx)
@@ -124,6 +140,9 @@ namespace EMS.Repositories.Implementations
                 var parameters = new { DesignationId = designationId };
 
                 var rowsAffected = await _connection.ExecuteAsync("DeleteDesignation", parameters, commandType: CommandType.StoredProcedure);
+
+                await _operationLogger.LogOperationAsync(EntityName.Designation, designationId, OperationType.Delete);
+
                 return rowsAffected > 0;
             }
             catch (SqlException sqlEx)

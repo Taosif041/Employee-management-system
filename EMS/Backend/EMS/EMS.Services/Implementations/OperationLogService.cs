@@ -4,6 +4,7 @@ using EMS.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using static EMS.Data.Enums;
 
 namespace EMS.Services.Implementations
 {
@@ -16,6 +17,7 @@ namespace EMS.Services.Implementations
             _operationLogRepository = operationLogRepository;
         }
 
+        // Get all logs without any filters
         public async Task<IEnumerable<OperationLog>> GetAllLogsAsync()
         {
             try
@@ -24,35 +26,30 @@ namespace EMS.Services.Implementations
             }
             catch (Exception ex)
             {
+                // Log the error (use a logging framework in production)
                 Console.WriteLine($"Error in GetAllLogsAsync: {ex.Message}");
-                throw; // Propagate the exception to the controller for appropriate response
-            }
-        }
-
-        public async Task<IEnumerable<OperationLog>> GetEmployeeLogsAsync()
-        {
-            try
-            {
-                return await _operationLogRepository.GetEmployeeLogsAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error in GetEmployeeLogsAsync: {ex.Message}");
                 throw; // Propagate the exception to the controller
             }
         }
 
-        public async Task<IEnumerable<OperationLog>> GetLogsByEmployeeIdAsync(int employeeId)
+        // Get logs based on filters: operationType, entityName, or entityId
+        public async Task<IEnumerable<OperationLog>> GetLogsWithParametersAsync(OperationType? operationType = null,
+                                                                                 EntityName? entityName = null,
+                                                                                 int? entityId = null)
         {
             try
             {
-                return await _operationLogRepository.GetLogsByEmployeeIdAsync(employeeId);
+                return await _operationLogRepository.GetLogsWithParametersAsync(operationType, entityName, entityId);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in GetLogsByEmployeeIdAsync for employeeId {employeeId}: {ex.Message}");
+                // Log the error (use a logging framework in production)
+                Console.WriteLine($"Error in GetLogsWithParametersAsync: {ex.Message}");
                 throw; // Propagate the exception to the controller
             }
         }
+
+        
+
     }
 }

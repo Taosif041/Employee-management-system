@@ -2,20 +2,24 @@
 using Microsoft.Data.SqlClient;
 using EMS.Models;
 using EMS.Repositories.Interfaces;
+using EMS.Helpers;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using System;
+using static EMS.Data.Enums;
 
 namespace EMS.Repositories.Implementations
 {
     public class DepartmentRepository : IDepartmentRepository
     {
         private readonly SqlConnection _connection;
+        private readonly OperationLogger _operationLogger;
 
-        public DepartmentRepository(SqlConnection connection)
+        public DepartmentRepository(SqlConnection connection, IOperationLogRepository operationLogRepository)
         {
             _connection = connection ?? throw new ArgumentNullException(nameof(connection), "Database connection cannot be null.");
+            _operationLogger = new OperationLogger(operationLogRepository);
         }
 
         public async Task<IEnumerable<Department>> GetAllDepartmentsAsync()
@@ -23,7 +27,11 @@ namespace EMS.Repositories.Implementations
             try
             {
                 await _connection.OpenAsync();
-                return await _connection.QueryAsync<Department>("GetAllDepartments", commandType: CommandType.StoredProcedure);
+                var departments = await _connection.QueryAsync<Department>("GetAllDepartments", commandType: CommandType.StoredProcedure);
+
+                await _operationLogger.LogOperationAsync(EntityName.Department, 0, OperationType.GetAll);
+
+                return departments;
             }
             catch (SqlException sqlEx)
             {
@@ -42,7 +50,11 @@ namespace EMS.Repositories.Implementations
             {
                 await _connection.OpenAsync();
                 var parameters = new { DepartmentId = departmentId };
-                return await _connection.QueryFirstOrDefaultAsync<Department>("GetDepartmentById", parameters, commandType: CommandType.StoredProcedure);
+                var department = await _connection.QueryFirstOrDefaultAsync<Department>("GetDepartmentById", parameters, commandType: CommandType.StoredProcedure);
+
+                await _operationLogger.LogOperationAsync(EntityName.Department, departmentId, OperationType.GetById);
+
+                return department;
             }
             catch (Exception ex)
             {
@@ -67,6 +79,8 @@ namespace EMS.Repositories.Implementations
 
                 var newId = await _connection.ExecuteScalarAsync<int>("CreateDepartment", parameters, commandType: CommandType.StoredProcedure);
                 department.DepartmentId = newId;
+
+                await _operationLogger.LogOperationAsync(EntityName.Department, newId, OperationType.Create);
 
                 return department;
             }
@@ -102,6 +116,8 @@ namespace EMS.Repositories.Implementations
 
                 await _connection.ExecuteAsync("UpdateDepartment", parameters, commandType: CommandType.StoredProcedure);
 
+                await _operationLogger.LogOperationAsync(EntityName.Department, department.DepartmentId, OperationType.Update);
+
                 return department;
             }
             catch (SqlException sqlEx)
@@ -124,6 +140,9 @@ namespace EMS.Repositories.Implementations
                 var parameters = new { DepartmentId = departmentId };
 
                 var rowsAffected = await _connection.ExecuteAsync("DeleteDepartment", parameters, commandType: CommandType.StoredProcedure);
+
+                await _operationLogger.LogOperationAsync(EntityName.Department, departmentId, OperationType.Delete);
+
                 return rowsAffected > 0;
             }
             catch (SqlException sqlEx)

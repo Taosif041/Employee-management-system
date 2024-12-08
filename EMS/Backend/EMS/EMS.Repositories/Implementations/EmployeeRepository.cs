@@ -2,10 +2,11 @@
 using Microsoft.Data.SqlClient;
 using EMS.Models;
 using EMS.Repositories.Interfaces;
-using System.Collections.Generic;
 using System.Data;
-using System.Threading.Tasks;
-using System;
+using static EMS.Data.Enums;
+using EMS.DTOs.Employee;
+using Employee = EMS.Models.Employee;
+using EMS.Helpers;
 
 namespace EMS.Repositories.Implementations
 {
@@ -13,11 +14,13 @@ namespace EMS.Repositories.Implementations
     {
         private readonly SqlConnection _connection;
         private readonly IOperationLogRepository _operationLogRepository;
+        private readonly OperationLogger _operationLogger;
 
         public EmployeeRepository(SqlConnection connection, IOperationLogRepository operationLogRepository)
         {
             _connection = connection;
             _operationLogRepository = operationLogRepository;
+            _operationLogger = new OperationLogger(_operationLogRepository);
         }
 
         public async Task<IEnumerable<Employee>> GetAllEmployeesAsync()
@@ -25,66 +28,79 @@ namespace EMS.Repositories.Implementations
             try
             {
                 await _connection.OpenAsync();
-                return await _connection.QueryAsync<Employee>("GetAllEmployees", commandType: CommandType.StoredProcedure);
+                var employees = await _connection.QueryAsync<Employee>("GetAllEmployees", commandType: CommandType.StoredProcedure);
+
+                // Log the operation
+                await _operationLogger.LogOperationAsync(EntityName.Employee, null, OperationType.GetAll);
+
+                return employees;
             }
             catch (SqlException sqlEx)
             {
-
-                // Optionally, you can throw the error again to be handled at a higher level
                 throw new Exception("An error occurred while fetching the employees from the database.", sqlEx);
             }
             catch (Exception ex)
             {
-                // Log any other general exception
                 Console.WriteLine($"General Error: {ex.Message}");
                 Console.WriteLine($"Stack Trace: {ex.StackTrace}");
-
                 throw new Exception("An unexpected error occurred.", ex);
             }
         }
 
         public async Task<Employee> GetEmployeeByIdAsync(int employeeId)
         {
-            await _connection.OpenAsync();
-            var parameters = new { EmployeeId = employeeId };
-
-            var employees =  await _connection.QueryFirstOrDefaultAsync<Employee>("GetEmployeeById", parameters, commandType: CommandType.StoredProcedure);
-            
-            var log = new OperationLog
+            try
             {
-                OperationType = "Read",
-                EntityName = "Employee",
-                EntityId = 0, // No specific entity ID for "Get All" operations
-                TimeStamp = DateTime.UtcNow,
-                OperationDetails = "Retrieved all employees"
-            };
-            await _operationLogRepository.LogOperationAsync(log);
-            return employees;
+                await _connection.OpenAsync();
+                var parameters = new { EmployeeId = employeeId };
+
+                var employee = await _connection.QueryFirstOrDefaultAsync<Employee>("GetEmployeeById", parameters, commandType: CommandType.StoredProcedure);
+
+                // Log the operation
+                await _operationLogger.LogOperationAsync(EntityName.Employee, employeeId, OperationType.GetById);
+
+                return employee;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"General Error: {ex.Message}");
+                throw new Exception("An unexpected error occurred while retrieving employee information.", ex);
+            }
         }
 
         public async Task<Employee> CreateEmployeeAsync(Employee employee)
         {
-            await _connection.OpenAsync();
-            var parameters = new
+            try
             {
-                employee.OfficeEmployeeId,
-                employee.Name,
-                employee.Email,
-                employee.Phone,
-                employee.Address,
-                employee.DOB,
-                employee.DepartmentId,
-                employee.DesignationId
-            };
+                await _connection.OpenAsync();
+                var parameters = new
+                {
+                    employee.OfficeEmployeeId,
+                    employee.Name,
+                    employee.Email,
+                    employee.Phone,
+                    employee.Address,
+                    employee.DOB,
+                    employee.DepartmentId,
+                    employee.DesignationId
+                };
 
-            var newId = await _connection.ExecuteScalarAsync<int> ("CreateEmployee", parameters, commandType : CommandType.StoredProcedure);
+                var newId = await _connection.ExecuteScalarAsync<int>("CreateEmployee", parameters, commandType: CommandType.StoredProcedure);
 
-            Console.WriteLine(newId);
-            employee.EmployeeId = newId;
-            Console.WriteLine(employee.EmployeeId);
+                employee.EmployeeId = newId;
 
-            return employee;
+                // Log the operation
+                await _operationLogger.LogOperationAsync(EntityName.Employee, newId, OperationType.Create);
+
+                return employee;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"General Error: {ex.Message}");
+                throw new Exception("An unexpected error occurred while creating employee information.", ex);
+            }
         }
+
         public async Task<Employee> UpdateEmployeeInformationAsync(Employee employee)
         {
             if (employee == null)
@@ -97,8 +113,6 @@ namespace EMS.Repositories.Implementations
 
                 if (currentEmployee == null)
                     throw new Exception($"Employee with ID {employee.EmployeeId} not found.");
-
-                //LogEmployeeDetails("Current Employee Details:", currentEmployee);
 
                 // Prepare the parameters for the update procedure, using current values if input is null
                 var parameters = new
@@ -113,19 +127,13 @@ namespace EMS.Repositories.Implementations
                     DesignationId = employee.DesignationId ?? currentEmployee.DesignationId
                 };
 
-                //LogEmployeeDetails("Updated Parameters:", parameters);
-
                 // Call the stored procedure to update the employee information
                 await _connection.ExecuteAsync("UpdateEmployeeInformation", parameters, commandType: CommandType.StoredProcedure);
 
-                // Return the updated employee details
-                //return await GetEmployeeByIdAsync(employee.EmployeeId);
+                // Log the operation
+                await _operationLogger.LogOperationAsync(EntityName.Employee, employee.EmployeeId, OperationType.Update);
+
                 return employee;
-            }
-            catch (SqlException sqlEx)
-            {
-                Console.WriteLine($"SQL Error: {sqlEx.Message}");
-                throw new Exception("An error occurred while updating employee information in the database.", sqlEx);
             }
             catch (Exception ex)
             {
@@ -133,17 +141,6 @@ namespace EMS.Repositories.Implementations
                 throw new Exception("An unexpected error occurred while updating employee information.", ex);
             }
         }
-
-        //private void LogEmployeeDetails(string message, object details)
-        //{
-        //    Console.WriteLine(message);
-        //    foreach (var property in details.GetType().GetProperties())
-        //    {
-        //        var value = property.GetValue(details) ?? "NULL";
-        //        Console.WriteLine($"{property.Name}: {value}");
-        //    }
-        //    Console.WriteLine();
-        //}
 
         public async Task<bool> DeleteEmployeeAsync(int employeeId)
         {
@@ -154,7 +151,9 @@ namespace EMS.Repositories.Implementations
 
                 var rowsAffected = await _connection.ExecuteAsync("DeleteEmployee", parameters, commandType: CommandType.StoredProcedure);
 
-                // Return true if the delete was successful (i.e., rowsAffected > 0)
+                // Log the operation
+                await _operationLogger.LogOperationAsync(EntityName.Employee, employeeId, OperationType.Delete);
+
                 return rowsAffected > 0;
             }
             catch (Exception ex)
@@ -164,9 +163,5 @@ namespace EMS.Repositories.Implementations
                 throw new Exception("An error occurred while deleting employee information.");
             }
         }
-
-
-
-
     }
 }

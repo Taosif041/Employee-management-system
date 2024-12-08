@@ -1,4 +1,4 @@
-﻿namespace EMS.Data
+﻿namespace EMS.EMS.Repositories.Database
 {
     public class DatabaseSettings
     {

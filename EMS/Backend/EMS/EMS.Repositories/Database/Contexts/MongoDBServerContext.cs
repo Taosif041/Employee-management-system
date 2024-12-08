@@ -1,4 +1,4 @@
-﻿namespace EMS.Data.Contexts
+﻿namespace EMS.EMS.Repositories.Database.Contexts
 {
     public class MongoDBServerContext
     {
