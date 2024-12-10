@@ -19,5 +19,10 @@ public static class ServiceRegistration
 
         services.AddScoped<IOperationLogRepository, OperationLogRepository>();
         services.AddScoped<IOperationLogService, OperationLogService>();
+
+
+        services.AddScoped<IAttendanceRepository, AttendanceRepository>();
+        services.AddScoped<IAttendanceService, AttendanceService>();
+
     }
 }

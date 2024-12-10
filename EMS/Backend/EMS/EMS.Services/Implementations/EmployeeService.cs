@@ -17,16 +17,9 @@ namespace EMS.Services.Implementations
         {
             try
             {
-                var employees = await _employeeRepository.GetAllEmployeesAsync(); // Assuming this returns Task<List<Employee>>
+                var employees = await _employeeRepository.GetAllEmployeesAsync(); 
 
-                // Log the employees (for debugging purposes)
-                Console.WriteLine("Employees fetched: ");
-                //foreach (var employee in employees)
-                //{
-                //    Console.WriteLine($"EmployeeId: {employee.EmployeeId}, Name: {employee.Name}");
-                //}
-
-                return employees; // No need for casting, as List<Employee> is already IEnumerable<Employee>
+                return employees; 
             }
             catch (Exception ex)
             {
@@ -55,10 +48,6 @@ namespace EMS.Services.Implementations
             }
             catch (Exception ex)
             {
-                // Log the error (optional)
-                // Log.Error(ex, "An error occurred while creating the employee.");
-
-                // Re-throw the exception or throw a custom exception
                 throw new Exception("An error occurred while creating the employee.", ex);
             }
         }
@@ -73,11 +62,8 @@ namespace EMS.Services.Implementations
                 }
 
                 // Assuming the repository method to update employee information.
-                var hello =  await _employeeRepository.UpdateEmployeeInformationAsync(employee);
-
-                
-
-                return hello;
+                var updatedEmployee =  await _employeeRepository.UpdateEmployeeInformationAsync(employee);
+                return updatedEmployee;
             }
             catch (ArgumentNullException ex)
             {
@@ -86,11 +72,6 @@ namespace EMS.Services.Implementations
             }
             catch (Exception ex)
             {
-                // General error handling
-                // Log the error (optional)
-                // Log.Error(ex, "An error occurred while updating employee information.");
-                Console.WriteLine("\njoy bangla service\n, ",ex.Message);
-
                 throw new Exception("An error occurred while updating employee information -> service layer.", ex);
             }
         }
@@ -113,10 +94,6 @@ namespace EMS.Services.Implementations
             }
             catch (Exception ex)
             {
-                // General error handling
-                // Log the error (optional)
-                // Log.Error(ex, "An error occurred while deleting employee information.");
-
                 throw new Exception("An error occurred while deleting employee information.", ex);
             }
         }
