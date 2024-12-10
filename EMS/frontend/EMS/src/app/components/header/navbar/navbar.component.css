@@ -1,0 +1,50 @@
+nav {
+  background-color: #333; /* Dark background color */
+  padding: 10px 0; /* Add padding to the navbar */
+  text-align: center; /* Center the content */
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex; /* Use flexbox for horizontal alignment */
+  justify-content: center; /* Center the list items */
+}
+
+nav ul li {
+  margin-right: 20px; /* Add margin between list items */
+}
+
+nav ul li:last-child {
+  margin-right: 0; /* Remove margin from the last list item */
+}
+
+nav ul li button {
+  text-decoration: none;
+  color: #fff; /* White text color */
+  font-size: 16px;
+  font-weight: bold;
+  background: none;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: color 0.3s ease; /* Smooth color transition */
+}
+
+nav ul li button:hover {
+  color: #ffcc00; /* Change text color on hover */
+}
+
+nav ul li button::before {
+  content: "";
+  display: block;
+  width: 0;
+  height: 2px;
+  background-color: #ffcc00; /* Yellow underline color */
+  transition: width 0.3s ease; /* Smooth width transition */
+}
+
+nav ul li button:hover::before {
+  width: 100%; /* Extend underline on hover */
+}
