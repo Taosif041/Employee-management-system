@@ -29,7 +29,6 @@ namespace EMS.Services.Implementations
                 var attendanceList = await _attendanceRepository.GetAllAttendanceAsync();
 
                 // Log the operation
-                await _operationLogger.LogOperationAsync(EntityName.Attendance, null, OperationType.GetAll);
 
                 return attendanceList;
             }
@@ -44,18 +43,16 @@ namespace EMS.Services.Implementations
         {
             try
             {
-                var Dat = date.ToString("yyyy-MM-dd");
-                var attendance = await _attendanceRepository.GetAttendanceByIdAndDateAsync(employeeId, Dat);
+                var attendance = await _attendanceRepository.GetAttendanceByIdAndDateAsync(employeeId, date);
 
                 // Log the operation
-                await _operationLogger.LogOperationAsync(EntityName.Attendance, employeeId, OperationType.GetById);
 
                 return attendance;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: hello darkness -> service {ex.Message}");
-                throw new Exception($"An error occurred while retrieving attendance for employee {employeeId} on {date.ToString("yyyy-MM-dd")}.", ex);
+                throw new Exception($"An error occurred while retrieving attendance for employee {employeeId} on {date}.", ex);
             }
         }
 
@@ -71,13 +68,12 @@ namespace EMS.Services.Implementations
                 var newAttendance = await _attendanceRepository.CreateAttendanceAsync(attendance);
 
                 // Log the operation
-                await _operationLogger.LogOperationAsync(EntityName.Attendance, newAttendance.AttendanceId, OperationType.Create);
 
                 return newAttendance;
             }
             catch (ArgumentNullException ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine($"Error-service: {ex.Message}");
                 throw new Exception("Invalid attendance data provided.", ex);
             }
             catch (Exception ex)
@@ -91,22 +87,15 @@ namespace EMS.Services.Implementations
         {
             try
             {
-                if (attendance == null)
-                {
-                    throw new ArgumentNullException(nameof(attendance), "Attendance cannot be null.");
-                }
+                
 
                 // Check if the attendance exists before attempting an update
-                var currentAttendance = await _attendanceRepository.GetAttendanceByIdAndDateAsync(attendance.EmployeeId, attendance.Date.ToString("yyyy-mm-dd"));
-                if (currentAttendance == null)
-                {
-                    throw new Exception($"Attendance record not found for employee {attendance.EmployeeId} on {attendance.Date}");
-                }
+                var currentAttendance = await _attendanceRepository.GetAttendanceByIdAndDateAsync(attendance.EmployeeId, attendance.Date);
+                
 
                 var updatedAttendance = await _attendanceRepository.UpdateAttendanceAsync(attendance);
 
                 // Log the operation
-                await _operationLogger.LogOperationAsync(EntityName.Attendance, updatedAttendance.AttendanceId, OperationType.Update);
 
                 return updatedAttendance;
             }
@@ -130,7 +119,6 @@ namespace EMS.Services.Implementations
                 var deletionSuccess = await _attendanceRepository.DeleteAttendanceAsync(employeeId, date);
 
                 // Log the operation
-                await _operationLogger.LogOperationAsync(EntityName.Attendance, employeeId, OperationType.Delete);
 
                 return deletionSuccess;
             }

@@ -82,15 +82,12 @@ namespace EMS.Controllers
         }
 
         // Update an existing attendance record
-        [HttpPut("{employeeId}/{date}")]
-        public async Task<IActionResult> UpdateAttendance(int employeeId, DateTime date, [FromBody] Attendance attendance)
+        [HttpPut]
+        public async Task<IActionResult> UpdateAttendance([FromBody] Attendance attendance)
         {
             try
             {
-                if (employeeId != attendance.EmployeeId || date != attendance.Date)
-                {
-                    return BadRequest("Employee ID or Date mismatch.");
-                }
+                
 
                 var updatedAttendance = await _attendanceService.UpdateAttendanceAsync(attendance);
                 if (updatedAttendance == null)
