@@ -1,0 +1,58 @@
+.outer-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.inner-card {
+  max-width: 600px;
+  width: 100%;
+  padding: 20px;
+  text-align: center;
+}
+
+.header {
+  margin: 20px;
+}
+
+.avatar-container {
+  text-align: center; /* Centers the avatar */
+  margin-top: 10px;
+}
+
+.avatar {
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border: solid 2px #333;
+}
+
+.profile-details,
+.profile-actions {
+  text-align: left; /* Left-aligns the profile details */
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around; /* Changed to space-between for better alignment */
+}
+
+.profile-details p {
+  margin: 8px 0;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.profile-button {
+  background-color: #333 !important;
+  color: white !important;
+  height: 50px;
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.profile-button:hover {
+  color: #ffcc00 !important;
+}

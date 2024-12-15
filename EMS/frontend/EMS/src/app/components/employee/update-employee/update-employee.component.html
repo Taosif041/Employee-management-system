@@ -1,0 +1,88 @@
+<div class="formContainer">
+  <h1>Update Employee</h1>
+  <form [formGroup]="updatedEmployee" (ngSubmit)="handleSubmit()">
+    <label>
+      Office Employee Id:
+      <input
+        type="number"
+        formControlName="officeEmployeeId"
+        required
+        [value]="selectedEmployee?.officeEmployeeId"
+      />
+    </label>
+
+    <label>
+      Name:
+      <input
+        type="text"
+        formControlName="name"
+        required
+        [value]="selectedEmployee?.name"
+      />
+    </label>
+
+    <label>
+      Email:
+      <input
+        type="email"
+        formControlName="email"
+        required
+        [value]="selectedEmployee?.email"
+      />
+    </label>
+
+    <label>
+      Phone:
+      <input
+        type="tel"
+        formControlName="phone"
+        required
+        [value]="selectedEmployee?.phone"
+      />
+    </label>
+
+    <label>
+      Address:
+      <input
+        type="text"
+        formControlName="address"
+        required
+        [value]="selectedEmployee?.address"
+      />
+    </label>
+
+    <label>
+      Date of Birth:
+      <input
+        type="date"
+        formControlName="dob"
+        required
+        [value]="selectedEmployee?.dob | date : 'yyyy-MM-dd'"
+      />
+    </label>
+
+    <label>
+      Department ID:
+      <input
+        type="number"
+        formControlName="departmentId"
+        required
+        [value]="selectedEmployee?.departmentId"
+      />
+    </label>
+
+    <label>
+      Designation ID:
+      <input
+        type="number"
+        formControlName="designationId"
+        required
+        [value]="selectedEmployee?.designationId"
+      />
+    </label>
+
+    <div class="buttonContainer">
+      <button type="submit" mat-flat-button class="submitButton">Submit</button>
+    </div>
+  </form>
+</div>

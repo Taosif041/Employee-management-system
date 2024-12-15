@@ -1,1 +1,93 @@
-<p>attendance works!</p>
+<div class="container">
+  <button mat-flat-button class="add">
+    <mat-icon>add</mat-icon>
+    Add new attendance
+  </button>
+  <mat-form-field>
+    <mat-label>Filter</mat-label>
+    <input
+      matInput
+      (keyup)="applyFilter($event)"
+      placeholder="Ex. Employee ID / Date"
+      #input
+    />
+  </mat-form-field>
+
+  <div class="mat-elevation-z8">
+    <mat-divider></mat-divider>
+
+    <table mat-table [dataSource]="dataSource" matSort>
+      <!-- Attendance ID Column -->
+      <ng-container matColumnDef="attendanceId">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Attendance ID</th>
+        <td mat-cell *matCellDef="let row">{{ row.attendanceId }}</td>
+      </ng-container>
+
+      <!-- Employee ID Column -->
+      <ng-container matColumnDef="employeeId">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Employee ID</th>
+        <td mat-cell *matCellDef="let row">{{ row.employeeId }}</td>
+      </ng-container>
+
+      <!-- Date Column -->
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.date | date : "shortDate" }}
+        </td>
+      </ng-container>
+
+      <!-- Check-In Time Column -->
+      <ng-container matColumnDef="checkInTime">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Check-In Time</th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.checkInTime | date : "shortTime" }}
+        </td>
+      </ng-container>
+
+      <!-- Check-Out Time Column -->
+      <ng-container matColumnDef="checkOutTime">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Check-Out Time
+        </th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.checkOutTime | date : "shortTime" }}
+        </td>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td mat-cell *matCellDef="let row">{{ row.status }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-icon-button style="color: #333">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button style="color: red">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="9">
+          No data matching the filter "{{ input.value }}"
+        </td>
+      </tr>
+    </table>
+
+    <mat-paginator
+      #paginator
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      aria-label="Select page of attendances"
+    ></mat-paginator>
+  </div>
+</div>

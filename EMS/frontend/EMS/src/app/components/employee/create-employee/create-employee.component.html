@@ -1,0 +1,55 @@
+<div class="formContainer">
+  <h1>Create New Employee</h1>
+  <form [formGroup]="newEmployee" (ngSubmit)="handleSubmit()">
+    <label>
+      Office Employee Id:
+      <input type="number" formControlName="officeEmployeeId" required />
+    </label>
+
+    <label>
+      Name:
+      <input type="text" formControlName="name" required />
+    </label>
+
+    <label>
+      Email:
+      <input type="email" formControlName="email" required />
+    </label>
+
+    <label>
+      Phone:
+      <input type="tel" formControlName="phone" required />
+    </label>
+
+    <label>
+      Address:
+      <input type="text" formControlName="address" required />
+    </label>
+
+    <label>
+      Date of Birth:
+      <input type="date" formControlName="dob" required />
+    </label>
+
+    <label>
+      Department ID:
+      <input type="number" formControlName="departmentId" required />
+    </label>
+
+    <label>
+      Designation ID:
+      <input type="number" formControlName="designationId" required />
+    </label>
+
+    <div class="buttonContainer">
+      <button
+        type="submit"
+        mat-flat-button
+        class="submitButton"
+        [disabled]="!newEmployee.valid"
+      >
+        Submit
+      </button>
+    </div>
+  </form>
+</div>

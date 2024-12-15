@@ -1,4 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+/* Success Snackbar */
+.success-snackbar {
+  background-color: #4caf50; /* Green */
+  color: white;
+  font-size: 16px;
+}
+
+/* Error Snackbar */
+.error-snackbar {
+  background-color: #f44336; /* Red */
+  color: white;
+  font-size: 16px;
+}
