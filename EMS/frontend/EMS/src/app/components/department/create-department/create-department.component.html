@@ -1,1 +1,14 @@
-<p>create-department works!</p>
+<div class="departmentContainer">
+  <h1>Create New Department</h1>
+  <form [formGroup]="newDepartment" (ngSubmit)="createNewDepartment()">
+    <label>
+      Name:
+      <input type="text" formControlName="name" required="" />
+    </label>
+    <div class="departmentButtonContainer">
+      <button type="submit" mat-flat-button [disabled]="!newDepartment.valid">
+        Submit
+      </button>
+    </div>
+  </form>
+</div>

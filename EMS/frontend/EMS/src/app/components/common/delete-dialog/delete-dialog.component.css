@@ -1,0 +1,13 @@
+button {
+  margin-right: 8px;
+}
+.confirm {
+  background-color: var(--button-background);
+  color: white;
+}
+.confirm:hover {
+  color: red;
+}
+.cancel:hover {
+  color: green;
+}

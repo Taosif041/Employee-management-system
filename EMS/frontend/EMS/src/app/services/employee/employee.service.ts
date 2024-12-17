@@ -12,7 +12,7 @@ export class EmployeeService {
   constructor(private http: HttpClient) {}
 
   // Get all employees
-  getAllEmployees(): Observable<any[]> {
+  getAllEmployees(): Observable<Employee[]> {
     return this.http.get<Employee[]>(this.apiUrl);
   }
 
@@ -33,7 +33,7 @@ export class EmployeeService {
 
   // Update an existing employee
   updateEmployee(id: number, employee: Employee): Observable<Employee> {
-    return this.http.put<Employee>(`${this.apiUrl}${id}`, employee);
+    return this.http.put<Employee>(`${this.apiUrl}/${id}`, employee);
   }
 
   // Delete an employee

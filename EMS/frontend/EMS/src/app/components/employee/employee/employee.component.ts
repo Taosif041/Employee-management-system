@@ -99,7 +99,6 @@ export class EmployeeComponent implements AfterViewInit, OnInit {
   deleteEmployee(employeeId: number): void {
     if (confirm('Are you sure you want to delete this employee?')) {
       this._employeeService.deleteEmployee(employeeId).subscribe(() => {
-        // Refresh the list after deletion
         this.getAllEmployees();
         this._sharedService.openSnackBar('Employee', 'delete', true);
       });

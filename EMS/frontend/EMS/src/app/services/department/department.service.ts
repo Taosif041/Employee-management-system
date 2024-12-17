@@ -7,12 +7,34 @@ import { Department } from '../../models/department.model';
   providedIn: 'root',
 })
 export class DepartmentService {
-  private apiUrl = 'http://localhost:5000/api/Department'; // Replace with your actual API URL
+  private apiUrl = 'http://localhost:5000/api/Department';
 
   constructor(private http: HttpClient) {}
+  private allDepartments: Department[] = [];
 
-  // Get all Departments
-  getAllDepartments(): Observable<any[]> {
-    return this.http.get<Department[]>(this.apiUrl); // HTTP GET request to fetch all employees
+  getAllDepartments(): Observable<Department[]> {
+    return this.http.get<Department[]>(this.apiUrl);
+  }
+
+  setAllDepartments(departments: Department[]): void {
+    this.allDepartments = departments;
+  }
+
+  getDepartmentById(id: number): Department | undefined {
+    return this.allDepartments.find(
+      (department) => department.departmentId === id
+    );
+  }
+
+  updateDepartment(department: Department, id: number): Observable<Department> {
+    return this.http.put<Department>(`${this.apiUrl}/${id}`, department);
+  }
+
+  createDepartment(department: Department): Observable<Department> {
+    return this.http.post<Department>(this.apiUrl, department);
+  }
+
+  deleteDepartment(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

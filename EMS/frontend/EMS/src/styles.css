@@ -9,16 +9,9 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-/* Success Snackbar */
-.success-snackbar {
-  background-color: #4caf50; /* Green */
-  color: white;
-  font-size: 16px;
-}
-
-/* Error Snackbar */
-.error-snackbar {
-  background-color: #f44336; /* Red */
-  color: white;
-  font-size: 16px;
+:root {
+  --button-background: #333;
+  --button-hover-color: #ffcc00;
+  --form-background: #f9f9f9;
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }

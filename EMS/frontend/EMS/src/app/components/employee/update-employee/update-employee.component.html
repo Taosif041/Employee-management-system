@@ -82,7 +82,14 @@
     </label>
 
     <div class="buttonContainer">
-      <button type="submit" mat-flat-button class="submitButton">Submit</button>
+      <button
+        type="submit"
+        mat-flat-button
+        class="submitButton"
+        [disabled]="!updatedEmployee.valid"
+      >
+        Submit
+      </button>
     </div>
   </form>
 </div>

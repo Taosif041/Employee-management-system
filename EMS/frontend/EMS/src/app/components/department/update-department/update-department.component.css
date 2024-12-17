@@ -1,0 +1,41 @@
+.updateDepartmentContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 20px;
+  margin-left: 30%;
+  margin-right: 30%;
+  width: 40%;
+  background-color: var(--form-background);
+  padding: 5px;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  text-align: center;
+}
+form {
+  margin: 10px;
+}
+label {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin-left: 20%;
+  margin-right: 20%;
+}
+h1 {
+  font-size: 20px;
+  margin-top: 5px;
+  color: #333;
+}
+input {
+  width: 100%;
+}
+
+button {
+  background-color: var(--button-background) !important;
+  color: white !important;
+  margin: 10px;
+}
+button:hover {
+  color: var(--button-hover-color) !important;
+}

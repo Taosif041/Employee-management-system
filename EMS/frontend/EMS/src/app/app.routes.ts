@@ -24,15 +24,15 @@ export const routes: Routes = [
 
   { path: 'attendance', component: AttendanceComponent },
   { path: 'createAttendance', component: CreateAttendanceComponent },
-  { path: 'updateAttendance', component: UpdateAttendanceComponent },
+  { path: 'updateAttendance/:id', component: UpdateAttendanceComponent },
 
   { path: 'department', component: DepartmentComponent },
   { path: 'createDepartment', component: CreateDepartmentComponent },
-  { path: 'updateDepartment', component: UpdateDepartmentComponent },
+  { path: 'updateDepartment/:id', component: UpdateDepartmentComponent },
 
   { path: 'designation', component: DesignationComponent },
   { path: 'createDesignation', component: CreateDesignationComponent },
-  { path: 'updateDesignation', component: UpdateDesignationComponent },
+  { path: 'updateDesignation/:id', component: UpdateDesignationComponent },
 
   { path: 'log', component: LogComponent },
 

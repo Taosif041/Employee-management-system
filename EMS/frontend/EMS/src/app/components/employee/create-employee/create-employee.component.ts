@@ -59,6 +59,7 @@ export class CreateEmployeeComponent {
         },
       });
     } else {
+      console.log('Invalid form data\n', this.newEmployee);
       this._sharedService.openSnackBar('Form', 'is invalid', false);
       this.newEmployee.reset();
     }

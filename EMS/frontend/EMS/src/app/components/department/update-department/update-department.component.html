@@ -1,1 +1,23 @@
-<p>update-department works!</p>
+<div class="updateDepartmentContainer">
+  <h1>Update Department: {{ selectedDepartment?.name }}</h1>
+  <form [formGroup]="updatedDepartment" (ngSubmit)="handleSubmit()">
+    <label>
+      Name:
+      <input
+        type="text"
+        formControlName="name"
+        required
+        [value]="selectedDepartment?.name"
+      />
+    </label>
+    <div class="updateDepartmentButtonContainer">
+      <button
+        type="submit"
+        mat-flat-button
+        [disabled]="!updatedDepartment.valid"
+      >
+        Submit
+      </button>
+    </div>
+  </form>
+</div>

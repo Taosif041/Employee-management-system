@@ -1,1 +1,14 @@
-<p>create-designation works!</p>
+<div class="departmentContainer">
+  <h1>Create New Department</h1>
+  <form [formGroup]="newDesignation" (ngSubmit)="createNewDesignation()">
+    <label>
+      Name:
+      <input type="text" formControlName="name" required="" />
+    </label>
+    <div class="departmentButtonContainer">
+      <button type="submit" mat-flat-button [disabled]="!newDesignation.valid">
+        Submit
+      </button>
+    </div>
+  </form>
+</div>
