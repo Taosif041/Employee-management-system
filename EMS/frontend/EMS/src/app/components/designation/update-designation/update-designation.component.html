@@ -1,1 +1,23 @@
-<p>update-designation works!</p>
+<div class="updatedDesignationContainer">
+  <h1>Update Designation: {{ selectedDesignation?.name }}</h1>
+  <form [formGroup]="updatedDesignation" (ngSubmit)="handleSubmit()">
+    <label>
+      Name:
+      <input
+        type="text"
+        formControlName="name"
+        required
+        [value]="selectedDesignation?.name"
+      />
+    </label>
+    <div class="updatedDesignationButtonContainer">
+      <button
+        type="submit"
+        mat-flat-button
+        [disabled]="!updatedDesignation.valid"
+      >
+        Submit
+      </button>
+    </div>
+  </form>
+</div>

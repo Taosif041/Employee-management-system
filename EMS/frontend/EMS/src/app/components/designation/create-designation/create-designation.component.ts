@@ -11,7 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { SharedService } from '../../../services/shared/shared.service';
 import { Designation } from '../../../models/designation.model'; // Assuming you have a Designation model
 import { DesignationService } from '../../../services/designation/designation.service'; // Assuming you have a DesignationService
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-designation',
@@ -26,7 +26,8 @@ import { RouterLink } from '@angular/router';
 })
 export class CreateDesignationComponent {
   private _sharedService = inject(SharedService);
-  private _designationService = inject(DesignationService); // Injecting DesignationService
+  private _designationService = inject(DesignationService);
+  private router = inject(Router);
   newDesignation = new FormGroup({
     name: new FormControl('', Validators.required),
   });
@@ -39,6 +40,7 @@ export class CreateDesignationComponent {
           this._sharedService.openSnackBar('Designation', 'created', true);
           this.newDesignation.reset();
           console.log('Designation created', Response);
+          this.router.navigate(['/designation']);
         },
         error: (err) => {
           this._sharedService.openSnackBar(

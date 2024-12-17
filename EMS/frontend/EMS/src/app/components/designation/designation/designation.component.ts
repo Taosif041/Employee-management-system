@@ -7,6 +7,7 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -44,6 +45,7 @@ import { DeleteDialogComponent } from '../../common/delete-dialog/delete-dialog.
 })
 export class DesignationComponent implements AfterViewInit, OnInit {
   readonly dialog = inject(MatDialog);
+  private router = inject(Router);
 
   private _designationService = inject(DesignationService);
   private _sharedService = inject(SharedService);
@@ -93,10 +95,13 @@ export class DesignationComponent implements AfterViewInit, OnInit {
         this._sharedService.openSnackBar('Designation', 'deleted', true);
         this.getAllDesignations();
         console.log('Designation deleted', Response);
+        console.log(Response);
       },
       error: (err) => {
         this._sharedService.openSnackBar('Delete', 'failed', false);
+        this.getAllDesignations();
         console.log('Designation delete failed', err);
+        console.log(err);
       },
     });
   }

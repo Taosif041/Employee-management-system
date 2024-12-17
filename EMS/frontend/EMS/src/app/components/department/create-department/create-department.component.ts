@@ -1,4 +1,6 @@
 import { Component, inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
 import {
   FormControl,
   FormGroup,
@@ -27,6 +29,8 @@ import { RouterLink } from '@angular/router';
 export class CreateDepartmentComponent {
   private _sharedService = inject(SharedService);
   private _departmentService = inject(DepartmentService);
+  private router = inject(Router);
+
   newDepartment = new FormGroup({
     name: new FormControl('', Validators.required),
   });
@@ -39,6 +43,7 @@ export class CreateDepartmentComponent {
           this._sharedService.openSnackBar('Department', 'created', true);
           this.newDepartment.reset();
           console.log('Department created', Response);
+          this.router.navigate(['/department']);
         },
         error: (err) => {
           this._sharedService.openSnackBar(

@@ -126,7 +126,7 @@ namespace EMS.Controllers
                 var success = await _designationService.DeleteDesignationAsync(designationId);
                 if (success)
                 {
-                    return Ok("Designation deleted successfully.");
+                    return Ok();
                 }
                 return NotFound($"Designation with ID {designationId} not found.");
             }
