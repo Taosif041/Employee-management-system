@@ -12,6 +12,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { Attendance } from '../../../models/attendance.model';
 import { AttendanceService } from '../../../services/attendance/attendance.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-attendance',
@@ -27,6 +28,7 @@ import { AttendanceService } from '../../../services/attendance/attendance.servi
     MatIconModule,
     MatDividerModule,
     MatButtonModule,
+    RouterLink,
   ],
 })
 export class AttendanceComponent implements AfterViewInit, OnInit {
@@ -57,6 +59,7 @@ export class AttendanceComponent implements AfterViewInit, OnInit {
     this._attendanceService
       .getAllAttendances()
       .subscribe((attendances: Attendance[]) => {
+        this._attendanceService.setAllAttendances(attendances);
         this.dataSource.data = attendances;
 
         if (this.paginator) {

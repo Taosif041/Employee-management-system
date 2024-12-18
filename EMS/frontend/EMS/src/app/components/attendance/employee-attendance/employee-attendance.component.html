@@ -1,0 +1,37 @@
+<div class="EmployeeAttendanceComponentContainer">
+  @for (attendance of attendances; track attendance.attendanceId) {
+  <mat-card appearance="raised" class="card">
+    <mat-card-content
+      ><strong>AttendanceId:</strong>
+      {{ attendance.attendanceId }}</mat-card-content
+    >
+    <mat-card-content
+      ><strong>EmployeeId:</strong>
+      {{ attendance.employeeId }}</mat-card-content
+    >
+    <mat-card-content
+      ><strong>Date:</strong> {{ attendance.date }}</mat-card-content
+    >
+    <mat-card-content
+      ><strong>Check In Time:</strong>
+      {{ attendance.checkInTime }}</mat-card-content
+    >
+    <mat-card-content
+      ><strong>Check Out Time:</strong>
+      {{ attendance.checkOutTime }}</mat-card-content
+    >
+    <mat-card-content
+      ><strong>Status:</strong> {{ attendance.status }}</mat-card-content
+    >
+    <div class="updateButton">
+      <button
+        mat-raised-button
+        [routerLink]="['/updateAttendance', attendance.attendanceId]"
+      >
+        edit
+      </button>
+    </div>
+  </mat-card>
+
+  }
+</div>

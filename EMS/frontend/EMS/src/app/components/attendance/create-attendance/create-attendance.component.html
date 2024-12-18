@@ -1,1 +1,44 @@
-<p>create-attendance works!</p>
+<!-- create-attendance.component.html -->
+<div class="attendanceContainer">
+  <h1>Create New Attendance</h1>
+  <form [formGroup]="newAttendance" (ngSubmit)="createNewAttendance()">
+    <!-- Employee ID -->
+    <mat-form-field appearance="outline">
+      <mat-label>Employee ID</mat-label>
+      <input matInput type="number" formControlName="employeeId" required />
+    </mat-form-field>
+
+    <!-- Date -->
+    <mat-form-field appearance="outline">
+      <mat-label>Date</mat-label>
+      <input matInput type="date" formControlName="date" required />
+    </mat-form-field>
+
+    <!-- Check-in Time -->
+    <mat-form-field appearance="outline">
+      <mat-label>Check-in Time</mat-label>
+      <input matInput type="time" formControlName="checkInTime" />
+    </mat-form-field>
+
+    <!-- Check-out Time -->
+    <mat-form-field appearance="outline">
+      <mat-label>Check-out Time</mat-label>
+      <input matInput type="time" formControlName="checkOutTime" />
+    </mat-form-field>
+
+    <!-- Status -->
+    <mat-form-field appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="selectField">
+        <mat-option value="CheckedIn">Check In</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Submit Button -->
+    <div class="attendanceButtonContainer">
+      <button mat-raised-button type="submit" [disabled]="!newAttendance.valid">
+        Submit
+      </button>
+    </div>
+  </form>
+</div>

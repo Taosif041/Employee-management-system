@@ -43,7 +43,13 @@
         </div>
       </div>
       <div class="profile-actions">
-        <button mat-flat-button class="profile-button">Check Attendance</button>
+        <button
+          mat-flat-button
+          [routerLink]="['../../employeeAttendance', employeeId]"
+          class="profile-button"
+        >
+          Check Attendance
+        </button>
         <button
           mat-flat-button
           [routerLink]="['../../updateEmployee', employeeId]"

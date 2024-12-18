@@ -15,6 +15,7 @@ import { CreateDepartmentComponent } from './components/department/create-depart
 import { UpdateDepartmentComponent } from './components/department/update-department/update-department.component';
 import { CreateDesignationComponent } from './components/designation/create-designation/create-designation.component';
 import { UpdateDesignationComponent } from './components/designation/update-designation/update-designation.component';
+import { EmployeeAttendanceComponent } from './components/attendance/employee-attendance/employee-attendance.component';
 
 export const routes: Routes = [
   { path: 'employee', component: EmployeeComponent },
@@ -25,6 +26,7 @@ export const routes: Routes = [
   { path: 'attendance', component: AttendanceComponent },
   { path: 'createAttendance', component: CreateAttendanceComponent },
   { path: 'updateAttendance/:id', component: UpdateAttendanceComponent },
+  { path: 'employeeAttendance/:id', component: EmployeeAttendanceComponent },
 
   { path: 'department', component: DepartmentComponent },
   { path: 'createDepartment', component: CreateDepartmentComponent },

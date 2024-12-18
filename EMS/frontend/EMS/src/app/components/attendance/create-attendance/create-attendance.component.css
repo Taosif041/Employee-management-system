@@ -1,0 +1,57 @@
+.attendanceContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
+  background-color: var(--form-background);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  border: 2px solid #333;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-align: center;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+h1 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #333;
+  text-align: center;
+}
+
+button {
+  background-color: var(--button-background) !important;
+  color: white !important;
+  margin-top: 5px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  width: 20%;
+  text-transform: uppercase;
+}
+
+button:hover {
+  color: var(--button-hover-color) !important;
+  background-color: var(--button-hover-background);
+}
+
+mat-select {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .attendanceContainer {
+    width: 90%;
+  }
+}

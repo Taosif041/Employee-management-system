@@ -24,7 +24,6 @@ import { Employee } from '../../../models/employee.model';
   styleUrl: './create-employee.component.css',
 })
 export class CreateEmployeeComponent {
-  // constructor(private _snackbar: SharedService) {}
   private _sharedService = inject(SharedService);
   private _employeeService = inject(EmployeeService);
 

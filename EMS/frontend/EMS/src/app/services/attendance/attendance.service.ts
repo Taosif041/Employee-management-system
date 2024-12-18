@@ -11,8 +11,45 @@ export class AttendanceService {
 
   constructor(private http: HttpClient) {}
 
-  // Get all Departments
-  getAllAttendances(): Observable<any[]> {
-    return this.http.get<Attendance[]>(this.apiUrl); // HTTP GET request to fetch all employees
+  private allAttendances: Attendance[] = [];
+
+  getAllAttendances(): Observable<Attendance[]> {
+    return this.http.get<Attendance[]>(this.apiUrl);
+  }
+
+  setAllAttendances(attendances: Attendance[]): void {
+    this.allAttendances = attendances;
+  }
+
+  fetchAndSetAllAttendances(): void {
+    this.getAllAttendances().subscribe({
+      next: (attendances) => {
+        this.setAllAttendances(attendances);
+      },
+      error: (err) => {
+        console.error('Error fetching attendances:', err);
+      },
+    });
+  }
+
+  getDesignationById(id: number): Attendance[] | undefined {
+    this.fetchAndSetAllAttendances();
+    return this.allAttendances.filter(
+      (attendance) => attendance.employeeId === id
+    );
+  }
+
+  getAttendanceById(id: number): Attendance | undefined {
+    return this.allAttendances.find(
+      (attendance) => attendance.attendanceId === id
+    );
+  }
+
+  createAttendance(attendance: Attendance): Observable<Attendance> {
+    return this.http.post<Attendance>(this.apiUrl, attendance);
+  }
+
+  updateAttendance(id: number, attendance: Attendance): Observable<Attendance> {
+    return this.http.put<Attendance>(`${this.apiUrl}/${id}`, attendance);
   }
 }

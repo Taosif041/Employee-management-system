@@ -14,6 +14,7 @@ import { SharedService } from '../../../services/shared/shared.service';
 import { Department } from '../../../models/department.model';
 import { DepartmentService } from '../../../services/department/department.service';
 import { RouterLink } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-create-department',
@@ -22,6 +23,7 @@ import { RouterLink } from '@angular/router';
     ReactiveFormsModule,
     MatButtonModule,
     MatFormFieldModule,
+    MatCardModule,
   ],
   templateUrl: './create-department.component.html',
   styleUrl: './create-department.component.css',

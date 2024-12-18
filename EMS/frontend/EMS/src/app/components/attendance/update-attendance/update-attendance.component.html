@@ -1,1 +1,65 @@
-<p>update-attendance works!</p>
+<div class="formContainer">
+  <h1>Update Attendance</h1>
+  <form [formGroup]="updatedAttendance" (ngSubmit)="handleSubmit()">
+    <label>
+      Employee Id:
+      <input
+        type="number"
+        formControlName="employeeId"
+        required
+        [value]="selectedAttendance?.employeeId"
+      />
+    </label>
+
+    <label>
+      Date:
+      <input
+        type="date"
+        formControlName="date"
+        required
+        [value]="selectedAttendance?.date | date : 'yyyy-MM-dd'"
+      />
+    </label>
+
+    <label>
+      Check In Time:
+      <input
+        type="time"
+        formControlName="checkInTime"
+        required
+        [value]="selectedAttendance?.checkInTime"
+      />
+    </label>
+
+    <label>
+      Check Out Time:
+      <input
+        type="time"
+        formControlName="checkOutTime"
+        required
+        [value]="selectedAttendance?.checkOutTime"
+      />
+    </label>
+
+    <label>
+      Check Out Time:
+      <input
+        type="text"
+        formControlName="status"
+        required
+        [value]="selectedAttendance?.status"
+      />
+    </label>
+
+    <div class="buttonContainer">
+      <button
+        type="submit"
+        mat-flat-button
+        class="submitButton"
+        [disabled]="!updatedAttendance.valid"
+      >
+        Submit
+      </button>
+    </div>
+  </form>
+</div>

@@ -82,7 +82,7 @@ namespace EMS.Controllers
         }
 
         // Update an existing attendance record
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAttendance([FromBody] Attendance attendance)
         {
             try

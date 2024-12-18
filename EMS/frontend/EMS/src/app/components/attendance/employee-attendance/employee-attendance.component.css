@@ -1,0 +1,60 @@
+.EmployeeAttendanceComponentContainer {
+  text-align: center;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 100px;
+  width: 100%;
+}
+
+.card {
+  margin: 10px;
+  width: 100%;
+  max-width: 300px;
+  text-align: left;
+  padding: 10px;
+}
+
+.updateButton {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+button {
+  width: 30% !important;
+  text-align: center;
+  border-radius: 12px;
+  background-color: #333 !important;
+  color: white !important;
+}
+
+button:hover {
+  color: var(--button-hover-color) !important;
+}
+
+@media (max-width: 1200px) {
+  .EmployeeAttendanceComponentContainer {
+    grid-template-columns: repeat(
+      3,
+      1fr
+    ); /* 3 cards per row on medium screens */
+  }
+}
+
+@media (max-width: 900px) {
+  .EmployeeAttendanceComponentContainer {
+    grid-template-columns: repeat(
+      2,
+      1fr
+    ); /* 2 cards per row on smaller screens */
+  }
+}
+
+@media (max-width: 600px) {
+  .EmployeeAttendanceComponentContainer {
+    grid-template-columns: 1fr; /* 1 card per row on very small screens */
+  }
+}

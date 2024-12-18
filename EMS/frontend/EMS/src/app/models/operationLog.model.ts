@@ -7,4 +7,5 @@ export interface OperationLog {
   time: string;
   operationDetails: string;
   databaseType: string;
+  dateTime?: number;
 }
