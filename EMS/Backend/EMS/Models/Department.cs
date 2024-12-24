@@ -2,8 +2,8 @@
 {
     public class Department
     {
-        public int DepartmentId { get; set; }             // Primary Key
-        public string Name { get; set; }                  // Unique department name
+        public int DepartmentId { get; set; }             
+        public string Name { get; set; }                 
     }
 
 }

@@ -65,9 +65,9 @@ export class DepartmentComponent implements AfterViewInit, OnInit {
   getAllDepartments(): void {
     this._departmentService
       .getAllDepartments()
-      .subscribe((departments: Department[]) => {
+      .subscribe((departments: any) => {
         this._departmentService.setAllDepartments(departments);
-        this.dataSource.data = departments;
+        this.dataSource.data = departments.data;
 
         if (this.paginator) {
           this.dataSource.paginator = this.paginator;
@@ -84,10 +84,10 @@ export class DepartmentComponent implements AfterViewInit, OnInit {
   }
   DeleteDepartment(departmentId: number): void {
     this._departmentService.deleteDepartment(departmentId).subscribe({
-      next: (Response) => {
+      next: (Response: any) => {
         this._sharedService.openSnackBar('Dpeartment', 'delete', true);
         this.getAllDepartments();
-        console.log('Department deleted', Response);
+        console.log('Department deleted', Response.data);
       },
       error: (err) => {
         this._sharedService.openSnackBar('Delete', 'failed', false);
@@ -116,7 +116,7 @@ export class DepartmentComponent implements AfterViewInit, OnInit {
       exitAnimationDuration,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
         this.DeleteDepartment(departmentId);
       } else {

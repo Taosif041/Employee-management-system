@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
-using static EMS.Data.Enums;
+using static EMS.Helpers.Enums;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EMS.Models

@@ -66,9 +66,9 @@ export class DesignationComponent implements AfterViewInit, OnInit {
   getAllDesignations(): void {
     this._designationService
       .getAllDesignations()
-      .subscribe((designations: Designation[]) => {
+      .subscribe((designations: any) => {
         this._designationService.setAllDesignations(designations);
-        this.dataSource.data = designations;
+        this.dataSource.data = designations.data;
 
         if (this.paginator) {
           this.dataSource.paginator = this.paginator;
@@ -91,10 +91,10 @@ export class DesignationComponent implements AfterViewInit, OnInit {
 
   DeleteDesignation(designationId: number): void {
     this._designationService.deleteDesignation(designationId).subscribe({
-      next: (Response) => {
+      next: (Response: any) => {
         this._sharedService.openSnackBar('Designation', 'deleted', true);
         this.getAllDesignations();
-        console.log('Designation deleted', Response);
+        console.log('Designation deleted', Response.data);
         console.log(Response);
       },
       error: (err) => {
@@ -126,7 +126,7 @@ export class DesignationComponent implements AfterViewInit, OnInit {
       exitAnimationDuration,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
         this.DeleteDesignation(designationId);
       } else {

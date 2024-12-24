@@ -1,10 +1,12 @@
-﻿using EMS.Models;
+﻿using EMS.Core.Helpers;
+using EMS.Helpers;
+using EMS.Models;
 using EMS.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using static EMS.Data.Enums;
+using static EMS.Helpers.Enums;
 
 namespace EMS.Controllers
 {
@@ -13,48 +15,49 @@ namespace EMS.Controllers
     public class OperationLogController : ControllerBase
     {
         private readonly IOperationLogService _operationLogService;
+        private readonly ApiResultFactory _apiResultFactory;
 
-        public OperationLogController(IOperationLogService operationLogService)
+
+        public OperationLogController(IOperationLogService operationLogService, ApiResultFactory apiResultFactory)
         {
             _operationLogService = operationLogService;
+            _apiResultFactory = apiResultFactory;
         }
 
-        // Endpoint to get all logs
         [HttpGet]
         public async Task<IActionResult> GetAllLogsAsync()
         {
             try
             {
-                var logs = await _operationLogService.GetAllLogsAsync();
-                return Ok(logs);
+                var result = await _operationLogService.GetAllLogsAsync();
+
+                if (result.IsSuccess) return Ok(result);
+
+                return StatusCode((int)result.ErrorCode, result);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in GetAllLogs: {ex.Message}");
-                return StatusCode(500, "An error occurred while retrieving the logs.");
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.GET_LOG_ERROR));
             }
         }
 
-        // Endpoint to get logs based on parameters (operationType, entityName, entityId)
-        [HttpGet("search")]
-        public async Task<IActionResult> GetLogsWithParametersAsync([FromQuery] string operationType = null,
-                                                                   [FromQuery] string entityName = null,
-                                                                   [FromQuery] int? entityId = null)
-        {
-            try
-            {
-                var logs = await _operationLogService.GetLogsWithParametersAsync(
-                    operationType != null ? Enum.TryParse(operationType, out OperationType opType) ? opType : (OperationType?)null : null,
-                    entityName != null ? Enum.TryParse(entityName, out EntityName entName) ? entName : (EntityName?)null : null,
-                    entityId);
+        //[HttpGet("search")]
+        //public async Task<IActionResult> GetLogsWithParametersAsync([FromQuery] string? operationType = null,
+        //                                                           [FromQuery] string? entityName = null,
+        //                                                           [FromQuery] int? entityId = null)
+        //{
+        //    try
+        //    {
+        //        var result = await _operationLogService.GetLogsWithParametersAsync(operationType, entityName, entityId);
 
-                return Ok(logs);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error in GetLogsWithParameters: {ex.Message}");
-                return StatusCode(500, "An error occurred while retrieving the logs with parameters.");
-            }
-        }
+        //        if (result.IsSuccess) return Ok(result);
+
+        //        return StatusCode((int)result.ErrorCode, result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.GET_LOG_ERROR));
+        //    }
+        //}
     }
 }

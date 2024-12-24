@@ -42,10 +42,10 @@ export class CreateEmployeeComponent {
       const employee: Employee = this.newEmployee.value as Employee;
 
       this._employeeService.createEmployee(employee).subscribe({
-        next: (response) => {
+        next: (response: any) => {
           this._sharedService.openSnackBar('Employee', 'created', true);
           this.newEmployee.reset();
-          console.log('Employee created', response);
+          console.log('Employee created', response.data);
         },
         error: (err) => {
           this._sharedService.openSnackBar(

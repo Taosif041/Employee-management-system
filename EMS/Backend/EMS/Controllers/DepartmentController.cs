@@ -1,4 +1,6 @@
-﻿using EMS.Models;
+﻿using EMS.Core.Helpers;
+using EMS.Helpers;
+using EMS.Models;
 using EMS.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,33 +11,53 @@ namespace EMS.Controllers
     public class DepartmentController : ControllerBase
     {
         private readonly IDepartmentService _departmentService;
+        private readonly ApiResultFactory _apiResultFactory;
 
-        public DepartmentController(IDepartmentService departmentService)
+        public DepartmentController(IDepartmentService departmentService, ApiResultFactory apiResultFactory)
         {
             _departmentService = departmentService;
+            _apiResultFactory = apiResultFactory;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAllDepartmentAsync()
         {
-            var departments = await _departmentService.GetAllDepartmentsAsync();
-            if (departments == null)
-                return NotFound();
+            try
+            {
+                var result = await _departmentService.GetAllDepartmentsAsync();
 
-            return Ok(departments);
+                if (result.IsSuccess)
+                    return Ok(result);
+
+                return StatusCode((int)result.ErrorCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.
+                    INTERNAL_SERVER_ERROR, ErrorMessage.GET_EMPLOYEE_ERROR));
+            }
         }
-
-
 
 
         [HttpGet("{departmentId}")]
         public async Task<IActionResult> GetDepartmentByIdAsync(int departmentId)
         {
-            var department = await _departmentService.GetDepartmentByIdAsync(departmentId);
-            if (department == null)
-                return NotFound();
+            try
+            {
+                var result = await _departmentService.GetDepartmentByIdAsync(departmentId);
 
-            return Ok(department);
+                if (result.IsSuccess)
+                    return Ok(result);
+
+                return StatusCode((int)result.ErrorCode, result);
+
+            }
+            catch (Exception ex)
+            {
+               return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.
+                    INTERNAL_SERVER_ERROR, ErrorMessage.GET_EMPLOYEE_ERROR));
+
+            }
         }
 
         [HttpPost]
@@ -43,22 +65,17 @@ namespace EMS.Controllers
         {
             try
             {
-                if (department == null)
-                {
-                    return BadRequest("Department cannot be null.");
-                }
-
                 var result = await _departmentService.CreateDepartmentAsync(department);
-                return Ok(result); // If everything goes well
+
+                if (result.IsSuccess)
+                    return Ok(result);
+
+                return StatusCode((int)result.ErrorCode, result);
             }
-            catch (ArgumentNullException ex)
-            {
-                return BadRequest(ex.Message); // Handle null or invalid department error
-            }
+            
             catch (Exception ex)
             {
-                // General exception handling (e.g., database issues, etc.)
-                return StatusCode(500, ex.Message); // Internal Server Error
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.CREATE_DEPARTMENT_ERROR));
             }
         }
 
@@ -72,22 +89,17 @@ namespace EMS.Controllers
                     return BadRequest("Department ID mismatch.");
                 }
 
-                var updatedDepartment = await _departmentService.UpdateDepartmentAsync(department);
-                if (updatedDepartment == null)
-                {
-                    return NotFound();
-                }
+                var result = await _departmentService.UpdateDepartmentAsync(department);
 
-                return Ok(updatedDepartment); // Success
+                if (result.IsSuccess)
+                    return Ok(result);
+
+                return StatusCode((int)result.ErrorCode, result);
             }
-            catch (ArgumentNullException ex)
-            {
-                return BadRequest("Invalid department input."); // Handle invalid department input
-            }
+            
             catch (Exception ex)
             {
-                Console.WriteLine("Error updating department");
-                return StatusCode(500, ex.Message); // Handle other internal server errors
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.UPDATE_DEPARTMENT_ERROR));
             }
         }
 
@@ -96,21 +108,16 @@ namespace EMS.Controllers
         {
             try
             {
-                var success = await _departmentService.DeleteDepartmentAsync(departmentId);
+                var result = await _departmentService.DeleteDepartmentAsync(departmentId);
 
-                if (success)
-                {
-                    return Ok(); // Success
-                }
-                return NotFound("Department not found"); // Handle department not found case
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message); // Handle invalid department ID
+                if (result.IsSuccess)
+                    return Ok(result);
+
+                return StatusCode((int)result.ErrorCode, result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message); // Handle other internal server errors
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.DELETE_DEPARTMENT_ERROR));
             }
         }
     }

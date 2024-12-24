@@ -13,18 +13,18 @@ export class AttendanceService {
 
   private allAttendances: Attendance[] = [];
 
-  getAllAttendances(): Observable<Attendance[]> {
+  getAllAttendances(): Observable<any> {
     return this.http.get<Attendance[]>(this.apiUrl);
   }
 
-  setAllAttendances(attendances: Attendance[]): void {
-    this.allAttendances = attendances;
+  setAllAttendances(attendances: any): any {
+    this.allAttendances = attendances.data;
   }
 
-  fetchAndSetAllAttendances(): void {
+  fetchAndSetAllAttendances(): any {
     this.getAllAttendances().subscribe({
-      next: (attendances) => {
-        this.setAllAttendances(attendances);
+      next: (attendances: any) => {
+        this.setAllAttendances(attendances.data);
       },
       error: (err) => {
         console.error('Error fetching attendances:', err);
@@ -32,24 +32,24 @@ export class AttendanceService {
     });
   }
 
-  getDesignationById(id: number): Attendance[] | undefined {
+  getDesignationById(id: number): any {
     this.fetchAndSetAllAttendances();
     return this.allAttendances.filter(
       (attendance) => attendance.employeeId === id
     );
   }
 
-  getAttendanceById(id: number): Attendance | undefined {
+  getAttendanceById(id: number): any {
     return this.allAttendances.find(
       (attendance) => attendance.attendanceId === id
     );
   }
 
-  createAttendance(attendance: Attendance): Observable<Attendance> {
+  createAttendance(attendance: Attendance): Observable<any> {
     return this.http.post<Attendance>(this.apiUrl, attendance);
   }
 
-  updateAttendance(id: number, attendance: Attendance): Observable<Attendance> {
+  updateAttendance(id: number, attendance: Attendance): Observable<any> {
     return this.http.put<Attendance>(`${this.apiUrl}/${id}`, attendance);
   }
 }

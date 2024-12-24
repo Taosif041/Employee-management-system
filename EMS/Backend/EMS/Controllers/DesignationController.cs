@@ -1,4 +1,6 @@
-﻿using EMS.Models;
+﻿using EMS.Core.Helpers;
+using EMS.Helpers;
+using EMS.Models;
 using EMS.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,134 +13,105 @@ namespace EMS.Controllers
     public class DesignationController : ControllerBase
     {
         private readonly IDesignationService _designationService;
+        private readonly ApiResultFactory _apiResultFactory;
 
-        public DesignationController(IDesignationService designationService)
+        public DesignationController(IDesignationService designationService, ApiResultFactory apiResultFactory)
         {
-            _designationService = designationService ?? throw new ArgumentNullException(nameof(designationService), "Designation service cannot be null.");
+            _designationService = designationService;
+            _apiResultFactory = apiResultFactory;
         }
 
-        // GET: api/designation
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAllDesignationAsync()
         {
             try
             {
-                var designations = await _designationService.GetAllDesignationsAsync();
-                if (designations == null)
-                {
-                    return NotFound("No designations found.");
-                }
-                return Ok(designations); // Return list of all designations
+                var result = await _designationService.GetAllDesignationsAsync();
+
+                if (result.IsSuccess)return Ok(result);
+
+                return StatusCode((int)result.ErrorCode, result);
             }
             catch (Exception ex)
             {
-                // Log the error (optional)
-                Console.WriteLine($"Error: {ex.Message}");
-                return StatusCode(500, "An error occurred while fetching designations.");
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.
+                    INTERNAL_SERVER_ERROR, ErrorMessage.GET_DESIGNATION_ERROR));
             }
         }
 
-        // GET: api/designation/{id}
         [HttpGet("{designationId}")]
         public async Task<IActionResult> GetDesignationByIdAsync(int designationId)
         {
             try
             {
-                var designation = await _designationService.GetDesignationByIdAsync(designationId);
-                if (designation == null)
-                {
-                    return NotFound($"Designation with ID {designationId} not found.");
-                }
+                var result = await _designationService.GetDesignationByIdAsync(designationId);
 
-                return Ok(designation); // Return the designation
+                if (result.IsSuccess) return Ok(result);
+
+                return StatusCode((int)result.ErrorCode, result);
             }
             catch (Exception ex)
             {
-                // Log the error (optional)
-                Console.WriteLine($"Error: {ex.Message}");
-                return StatusCode(500, $"An error occurred while fetching designation with ID {designationId}.");
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.
+                    INTERNAL_SERVER_ERROR, ErrorMessage.GET_DESIGNATION_ERROR));
             }
         }
 
-        // POST: api/designation
         [HttpPost]
         public async Task<IActionResult> CreateDesignationAsync([FromBody] Designation designation)
         {
             try
             {
-                if (designation == null)
-                {
-                    return BadRequest("Designation cannot be null.");
-                }
+                var result = await _designationService.CreateDesignationAsync(designation);
 
-                var createdDesignation = await _designationService.CreateDesignationAsync(designation);
-                return Ok(createdDesignation); // Return the newly created designation
+                if (result.IsSuccess) return Ok(result);
+
+                return StatusCode((int)result.ErrorCode, result);
+
             }
-            catch (ArgumentNullException ex)
-            {
-                return BadRequest($"Invalid data: {ex.Message}"); // Handle invalid input
-            }
+            
             catch (Exception ex)
             {
-                // Log the error (optional)
-                Console.WriteLine($"Error: {ex.Message}");
-                return StatusCode(500, "An error occurred while creating the designation.");
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.
+                    INTERNAL_SERVER_ERROR, ErrorMessage.CREATE_DESIGNATION_ERROR));
             }
         }
 
-        // PUT: api/designation/{id}
         [HttpPut("{designationId}")]
         public async Task<IActionResult> UpdateDesignationAsync(int designationId, [FromBody] Designation designation)
         {
             try
             {
-                if (designationId != designation.DesignationId)
-                {
-                    return BadRequest("Designation ID mismatch.");
-                }
+                var result = await _designationService.UpdateDesignationAsync(designation);
 
-                var updatedDesignation = await _designationService.UpdateDesignationAsync(designation);
-                if (updatedDesignation == null)
-                {
-                    return NotFound($"Designation with ID {designationId} not found.");
-                }
+                if (result.IsSuccess) return Ok(result);
 
-                return Ok(updatedDesignation); // Return the updated designation
+                return StatusCode((int)result.ErrorCode, result);
             }
-            catch (ArgumentNullException ex)
-            {
-                return BadRequest($"Invalid data: {ex.Message}"); // Handle invalid input
-            }
+            
             catch (Exception ex)
             {
-                // Log the error (optional)
-                Console.WriteLine($"Error: {ex.Message}");
-                return StatusCode(500, "An error occurred while updating the designation.");
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.
+                    INTERNAL_SERVER_ERROR, ErrorMessage.UPDATE_DESIGNATION_ERROR));
             }
         }
 
-        // DELETE: api/designation/{id}
         [HttpDelete("{designationId}")]
         public async Task<IActionResult> DeleteDesignationAsync(int designationId)
         {
             try
             {
-                var success = await _designationService.DeleteDesignationAsync(designationId);
-                if (success)
-                {
-                    return Ok();
-                }
-                return NotFound($"Designation with ID {designationId} not found.");
+                var result = await _designationService.DeleteDesignationAsync(designationId);
+
+                if (result.IsSuccess) return Ok(result);
+
+                return StatusCode((int)result.ErrorCode, result);
             }
-            catch (ArgumentException ex)
-            {
-                return BadRequest($"Invalid data: {ex.Message}"); // Handle invalid input
-            }
+            
             catch (Exception ex)
             {
-                // Log the error (optional)
-                Console.WriteLine($"Error: {ex.Message}");
-                return StatusCode(500, "An error occurred while deleting the designation.");
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.
+                    INTERNAL_SERVER_ERROR, ErrorMessage.DELETE_DESIGNATION_ERROR));
             }
         }
     }

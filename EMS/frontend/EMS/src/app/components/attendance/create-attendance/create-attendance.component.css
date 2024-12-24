@@ -5,12 +5,12 @@
   margin-top: 30px;
   margin-left: auto;
   margin-right: auto;
-  width: 30%;
+  width: 20%;
   background-color: var(--form-background);
   padding: 20px;
   border-radius: 8px;
   box-shadow: var(--box-shadow);
-  border: 2px solid #333;
+  /* border: 2px solid #333; */
 }
 
 form {

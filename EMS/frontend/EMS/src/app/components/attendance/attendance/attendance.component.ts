@@ -52,15 +52,16 @@ export class AttendanceComponent implements AfterViewInit, OnInit {
   constructor(private _attendanceService: AttendanceService) {}
 
   ngOnInit(): void {
-    this.getAllAttendances(); // Fetch data when the component initializes
+    this.getAllAttendances();
   }
 
   getAllAttendances(): void {
     this._attendanceService
       .getAllAttendances()
-      .subscribe((attendances: Attendance[]) => {
+      .subscribe((attendances: any) => {
         this._attendanceService.setAllAttendances(attendances);
-        this.dataSource.data = attendances;
+        console.log(attendances);
+        this.dataSource.data = attendances.data;
 
         if (this.paginator) {
           this.dataSource.paginator = this.paginator;

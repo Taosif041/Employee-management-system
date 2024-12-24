@@ -2,8 +2,8 @@
 {
     public class Designation
     {
-        public int DesignationId { get; set; }            // Primary Key
-        public string Name { get; set; }                  // Unique designation name
+        public int DesignationId { get; set; }            
+        public string Name { get; set; }                  
     }
 
 }

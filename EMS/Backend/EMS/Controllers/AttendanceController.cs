@@ -1,4 +1,6 @@
-﻿using EMS.Models;
+﻿using EMS.Core.Helpers;
+using EMS.Helpers;
+using EMS.Models;
 using EMS.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,53 +13,48 @@ namespace EMS.Controllers
     public class AttendanceController : ControllerBase
     {
         private readonly IAttendanceService _attendanceService;
+        private readonly ApiResultFactory _apiResultFactory;
 
-        public AttendanceController(IAttendanceService attendanceService)
+        public AttendanceController(IAttendanceService attendanceService, ApiResultFactory apiResultFactory)
         {
             _attendanceService = attendanceService;
+            _apiResultFactory = apiResultFactory;
         }
 
-        // Get all attendance records
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             try
             {
-                var attendanceRecords = await _attendanceService.GetAllAttendanceAsync();
-                if (attendanceRecords == null)
-                {
-                    return NotFound("No attendance records found. kk");
-                }
+                var result = await _attendanceService.GetAllAttendanceAsync();
 
-                return Ok(attendanceRecords);
+                if (result.IsSuccess) return Ok(result);
+
+                return StatusCode((int)result.ErrorCode, result);
             }
             catch (Exception ex)
             {
-                return StatusCode(50, ex.Message); // Internal server error
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.GET_ATTENDANCE_ERROR));
             }
         }
 
-        // Get attendance for a specific employee on a specific date
         [HttpGet("{employeeId}/{date}")]
         public async Task<IActionResult> GetAttendanceByEmployeeIdAndDateAsync(int employeeId, DateTime date)
         {
             try
             {
-                var attendance = await _attendanceService.GetAttendanceByEmployeeIdAndDateAsync(employeeId, date);
-                if (attendance == null)
-                {
-                    return NotFound("Attendance record not found.");
-                }
+                var result = await _attendanceService.GetAttendanceByEmployeeIdAndDateAsync(employeeId, date);
 
-                return Ok(attendance);
+                if (result.IsSuccess) return Ok(result);
+
+                return StatusCode((int)result.ErrorCode, result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message); 
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.GET_ATTENDANCE_ERROR));
             }
         }
 
-        // Create a new attendance record
         [HttpPost]
         public async Task<IActionResult> CreateAttendance([FromBody] Attendance attendance)
         {
@@ -65,69 +62,56 @@ namespace EMS.Controllers
             {
                 if (attendance == null)
                 {
-                    return BadRequest("Invalid attendance data.");
+                    return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.BAD_REQUEST, ErrorMessage.CREATE_ATTENDANCE_ERROR));
                 }
 
                 var result = await _attendanceService.CreateAttendanceAsync(attendance);
-                return Ok(result); // Return the created attendance record
+
+                if (result.IsSuccess) return Ok(result);
+
+                return StatusCode((int)result.ErrorCode, result);
             }
-            catch (ArgumentNullException ex)
-            {
-                return BadRequest(ex.Message); // Invalid input
-            }
+            
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message); // Internal server error
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.CREATE_ATTENDANCE_ERROR));
             }
         }
 
-        // Update an existing attendance record
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAttendance([FromBody] Attendance attendance)
         {
             try
             {
-                
 
-                var updatedAttendance = await _attendanceService.UpdateAttendanceAsync(attendance);
-                if (updatedAttendance == null)
-                {
-                    return NotFound("Attendance record not found.");
-                }
+                var result = await _attendanceService.UpdateAttendanceAsync(attendance);
 
-                return Ok(updatedAttendance); // Return updated attendance record
+                if (result.IsSuccess) return Ok(result.Data);
+
+                return StatusCode((int)result.ErrorCode, result);
             }
-            catch (ArgumentNullException ex)
-            {
-                return BadRequest("Invalid attendance data.");
-            }
+            
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message); // Internal server error
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.UPDATE_ATTENDANCE_ERROR));
             }
         }
 
-        // Delete a specific attendance record
         [HttpDelete("{employeeId}/{date}")]
         public async Task<IActionResult> DeleteAttendance(int employeeId, DateTime date)
         {
             try
             {
-                var success = await _attendanceService.DeleteAttendanceAsync(employeeId, date);
-                if (success)
-                {
-                    return Ok(); // Successfully deleted
-                }
+                var result = await _attendanceService.DeleteAttendanceAsync(employeeId, date);
 
-                return NotFound("Attendance record not found.");
+                if (result.IsSuccess) return Ok(result);
+
+                return StatusCode((int)result.ErrorCode, result);
             }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message); // Invalid input
-            }
+            
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message); // Internal server error
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.DELETE_ATTENDANCE_ERROR));
             }
         }
     }

@@ -68,10 +68,11 @@ export class EmployeeComponent implements AfterViewInit, OnInit {
   }
 
   getAllEmployees(): void {
-    this._employeeService
-      .getAllEmployees()
-      .subscribe((employees: Employee[]) => {
-        this.dataSource.data = employees;
+    this._employeeService.getAllEmployees().subscribe({
+      next: (employees: any) => {
+        this.dataSource.data = employees.data;
+
+        console.log('employees -> ', employees);
 
         if (this.paginator) {
           this.dataSource.paginator = this.paginator;
@@ -79,7 +80,11 @@ export class EmployeeComponent implements AfterViewInit, OnInit {
         if (this.sort) {
           this.dataSource.sort = this.sort;
         }
-      });
+      },
+      error: (err) => {
+        console.error('Error fetching employee data', err);
+      },
+    });
   }
 
   ngAfterViewInit(): void {

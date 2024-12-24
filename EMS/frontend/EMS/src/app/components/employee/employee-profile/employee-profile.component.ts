@@ -39,8 +39,8 @@ export class EmployeeProfileComponent implements OnInit {
 
   getEmployeeById(id: number): void {
     this._employeeService.getEmployeeById(id).subscribe(
-      (employee) => {
-        this.selectedEmployee = employee; // Do something with the employee data
+      (employee: any) => {
+        this.selectedEmployee = employee.data; // Do something with the employee data
       },
       (error) => {
         console.error('Error fetching employee by ID:', error);

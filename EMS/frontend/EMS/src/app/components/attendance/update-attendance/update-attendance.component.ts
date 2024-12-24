@@ -77,9 +77,9 @@ export class UpdateAttendanceComponent implements OnInit {
       this._attendanceService
         .updateAttendance(this.id, editedAttendance)
         .subscribe({
-          next: (response) => {
+          next: (response: any) => {
             this._sharedService.openSnackBar('Attendance', 'updated', true);
-            console.log('Attendance updated', response);
+            console.log('Attendance updated', response.data);
             this.updatedAttendance.reset();
             this.router.navigate(['/attendance']);
           },

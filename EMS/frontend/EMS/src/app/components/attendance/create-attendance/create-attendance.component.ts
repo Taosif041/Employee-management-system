@@ -54,10 +54,10 @@ export class CreateAttendanceComponent {
       console.log(attendance);
 
       this._attendanceService.createAttendance(attendance).subscribe({
-        next: (response) => {
+        next: (response: any) => {
           this._sharedService.openSnackBar('Attendance', 'created', true);
           this.newAttendance.reset();
-          console.log('Attendance created', response);
+          console.log('Attendance created', response.data);
           this.router.navigate(['/attendance']);
         },
         error: (err) => {

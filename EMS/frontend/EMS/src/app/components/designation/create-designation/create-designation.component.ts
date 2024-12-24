@@ -36,10 +36,10 @@ export class CreateDesignationComponent {
     if (this.newDesignation.valid) {
       const designation: Designation = this.newDesignation.value as Designation;
       this._designationService.createDesignation(designation).subscribe({
-        next: (Response) => {
+        next: (Response: any) => {
           this._sharedService.openSnackBar('Designation', 'created', true);
           this.newDesignation.reset();
-          console.log('Designation created', Response);
+          console.log('Designation created', Response.data);
           this.router.navigate(['/designation']);
         },
         error: (err) => {

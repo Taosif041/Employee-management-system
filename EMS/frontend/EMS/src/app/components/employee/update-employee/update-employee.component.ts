@@ -40,8 +40,8 @@ export class UpdateEmployeeComponent implements OnInit {
 
   getEmployeeById(id: number): void {
     this._employeeService.getEmployeeById(id).subscribe(
-      (employee) => {
-        this.selectedEmployee = employee;
+      (employee: any) => {
+        this.selectedEmployee = employee.data;
 
         // Initialize form dynamically
         this.updatedEmployee = new FormGroup({
@@ -89,10 +89,10 @@ export class UpdateEmployeeComponent implements OnInit {
       const editedEmployee: Employee = this.updatedEmployee.value as Employee;
 
       this._employeeService.updateEmployee(this.id, editedEmployee).subscribe({
-        next: (response) => {
+        next: (response: any) => {
           this._sharedService.openSnackBar('Employee', 'updated', true);
           this.updatedEmployee.reset();
-          console.log('Employee updated', response);
+          console.log('Employee updated', response.data);
           this.router.navigate(['/employee']);
         },
         error: (err) => {

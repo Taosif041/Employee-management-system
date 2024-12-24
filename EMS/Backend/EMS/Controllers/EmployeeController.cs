@@ -1,4 +1,6 @@
-﻿using EMS.Models;
+﻿using EMS.Core.Helpers;
+using EMS.Helpers;
+using EMS.Models;
 using EMS.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,45 +11,64 @@ namespace EMS.Controllers
     public class EmployeeController: ControllerBase
     {
         private readonly IEmployeeService _employeeService;
-        public EmployeeController(IEmployeeService employeeService)
+        private readonly ApiResultFactory _apiResultFactory;
+        public EmployeeController(IEmployeeService employeeService, ApiResultFactory apiResultFactory)
         {
             _employeeService = employeeService;
+            _apiResultFactory = apiResultFactory;
         }
+
+
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var employees = await _employeeService.GetAllEmployeesAsync();
-            if (employees == null)
-                return NotFound();
+            try
+            {
+                var result = await _employeeService.GetAllEmployeesAsync();
 
-            return Ok(employees);
+                if (result.IsSuccess)return Ok(result.Data);
+
+                return StatusCode((int)result.ErrorCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.GET_EMPLOYEE_ERROR));
+            }
         }
+
         [HttpGet("{employeeId}")]
         public async Task<IActionResult> GetEmployeeByIdAsync(int employeeId)
         {
-            var employee = await _employeeService.GetEmployeeByIdAsync(employeeId);
-            if (employee == null)
-                return NotFound();
+            try
+            {
+                var result = await _employeeService.GetEmployeeByIdAsync(employeeId);
 
-            return Ok(employee);
+                if (result.IsSuccess)
+                    return Ok(result.Data);
+                return StatusCode((int)result.ErrorCode, result);
 
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.GET_EMPLOYEE_ERROR));
+            }
         }
+
         [HttpPost]
         public async Task<IActionResult> CreateEmployee(Employee employee)
         {
             try
             {
                 var result = await _employeeService.CreateEmployeeAsync(employee);
-                return Ok(result); // If everything goes well
-            }
-            catch (ArgumentNullException ex)
-            {
-                return BadRequest(ex.Message); // Handle null or invalid employee error
+                if (result.IsSuccess)
+                    return Ok(result.Data);
+
+                return StatusCode((int)result.ErrorCode, result);
             }
             catch (Exception ex)
             {
-                // General exception handling (e.g., database issues, etc.)
-                return StatusCode(500, ex.Message); // Internal Server Error
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.CREATE_EMPLOYEE_ERROR));
             }
         }
 
@@ -58,26 +79,19 @@ namespace EMS.Controllers
             {
                 if (employeeId != employee.EmployeeId)
                 {
-                    return BadRequest("Employee ID mismatch.");
+                    return StatusCode(400, _apiResultFactory.CreateErrorResult(ErrorCode.BAD_REQUEST, ErrorMessage.UPDATE_EMPLOYEE_ERROR));
                 }
 
-                var updatedEmployee = await _employeeService.UpdateEmployeeInformationAsync(employee);
-                if (updatedEmployee == null)
-                {
-                    return NotFound();
-                }
+                var result = await _employeeService.UpdateEmployeeInformationAsync(employee);
 
+                if (result.IsSuccess)
+                    return Ok(result.Data);
 
-                return Ok(updatedEmployee); // Success
-            }
-            catch (ArgumentNullException ex)
-            {
-                return BadRequest("Invalid employee input."); // Handle invalid employee input
+                return StatusCode((int)result.ErrorCode, result);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("joy bangla");
-                return StatusCode(500, ex.Message); // Handle other internal server errors
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.UPDATE_EMPLOYEE_ERROR));
             }
         }
 
@@ -87,21 +101,17 @@ namespace EMS.Controllers
         {
             try
             {
-                var success = await _employeeService.DeleteEmployeeAsync(employeeId);
-                
-                if (success)
-                {
-                    return Ok(); // Success
-                }
-                return NotFound("Employee not found"); // Handle employee not found case
+                var result = await _employeeService.DeleteEmployeeAsync(employeeId);
+
+                if (result.IsSuccess)
+                    return Ok(result.Data);
+
+                return StatusCode((int)result.ErrorCode, result);
             }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message); // Handle invalid employee ID
-            }
+           
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message); // Handle other internal server errors
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.DELETE_EMPLOYEE_ERROR));
             }
         }
 
