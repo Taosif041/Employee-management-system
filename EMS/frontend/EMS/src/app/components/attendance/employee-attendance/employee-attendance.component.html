@@ -10,15 +10,15 @@
       {{ attendance.employeeId }}</mat-card-content
     >
     <mat-card-content
-      ><strong>Date:</strong> {{ attendance.date }}</mat-card-content
+      ><strong>Date:</strong> {{ attendance.date | date }}</mat-card-content
     >
     <mat-card-content
       ><strong>Check In Time:</strong>
-      {{ attendance.checkInTime }}</mat-card-content
+      {{ attendance.checkInTime | date : "shortTime" }}</mat-card-content
     >
     <mat-card-content
       ><strong>Check Out Time:</strong>
-      {{ attendance.checkOutTime }}</mat-card-content
+      {{ attendance.checkOutTime | date : "shortTime" }}</mat-card-content
     >
     <mat-card-content
       ><strong>Status:</strong> {{ attendance.status }}</mat-card-content
@@ -31,6 +31,15 @@
         edit
       </button>
     </div>
+  </mat-card>
+
+  }
+</div>
+
+<div class="notFoundContainer">
+  @if(attendances.length == 0){
+  <mat-card appearance="outlined" class="notFound">
+    <mat-card-content>No record found!</mat-card-content>
   </mat-card>
 
   }

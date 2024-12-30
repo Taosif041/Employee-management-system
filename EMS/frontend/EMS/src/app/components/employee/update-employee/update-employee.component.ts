@@ -10,14 +10,25 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 import { SharedService } from '../../../services/shared/shared.service';
 import { EmployeeService } from '../../../services/employee/employee.service';
 import { Employee } from '../../../models/employee.model';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-update-employee',
-  imports: [CommonModule, MatButtonModule, FormsModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+  ],
   templateUrl: './update-employee.component.html',
   styleUrl: './update-employee.component.css',
 })
@@ -29,7 +40,17 @@ export class UpdateEmployeeComponent implements OnInit {
 
   id: number = 0;
   selectedEmployee: Employee | null = null;
-  updatedEmployee!: FormGroup;
+  updatedEmployee: FormGroup = new FormGroup({
+    employeeId: new FormControl(null),
+    officeEmployeeId: new FormControl(null, Validators.required),
+    name: new FormControl(null, Validators.required),
+    email: new FormControl(null, [Validators.required, Validators.email]),
+    phone: new FormControl(null, Validators.required),
+    address: new FormControl(null, Validators.required),
+    dob: new FormControl(null, Validators.required),
+    departmentId: new FormControl(null, Validators.required),
+    designationId: new FormControl(null, Validators.required),
+  });
 
   constructor() {}
 
@@ -40,42 +61,20 @@ export class UpdateEmployeeComponent implements OnInit {
 
   getEmployeeById(id: number): void {
     this._employeeService.getEmployeeById(id).subscribe(
-      (employee: any) => {
-        this.selectedEmployee = employee.data;
+      (employee) => {
+        this.selectedEmployee = employee;
 
-        // Initialize form dynamically
-        this.updatedEmployee = new FormGroup({
-          employeeId: new FormControl(this.id),
-          officeEmployeeId: new FormControl(
-            this.selectedEmployee?.officeEmployeeId,
-            Validators.required
-          ),
-          name: new FormControl(
-            this.selectedEmployee?.name,
-            Validators.required
-          ),
-          email: new FormControl(this.selectedEmployee?.email, [
-            Validators.required,
-            Validators.email,
-          ]),
-          phone: new FormControl(
-            this.selectedEmployee?.phone,
-            Validators.required
-          ),
-          address: new FormControl(
-            this.selectedEmployee?.address,
-            Validators.required
-          ),
-          dob: new FormControl(this.selectedEmployee?.dob, Validators.required),
-
-          departmentId: new FormControl(
-            this.selectedEmployee?.departmentId,
-            Validators.required
-          ),
-          designationId: new FormControl(
-            this.selectedEmployee?.designationId,
-            Validators.required
-          ),
+        // Populate the form using patchValue
+        this.updatedEmployee.patchValue({
+          employeeId: this.id,
+          officeEmployeeId: employee.officeEmployeeId,
+          name: employee.name,
+          email: employee.email,
+          phone: employee.phone,
+          address: employee.address,
+          dob: employee.dob,
+          departmentId: employee.departmentId,
+          designationId: employee.designationId,
         });
       },
       (error) => {
@@ -87,12 +86,14 @@ export class UpdateEmployeeComponent implements OnInit {
   handleSubmit() {
     if (this.updatedEmployee.valid) {
       const editedEmployee: Employee = this.updatedEmployee.value as Employee;
+      console.log('editedEmployee', editedEmployee);
+      console.log('editedEmployee.dob -> ', editedEmployee.dob);
 
       this._employeeService.updateEmployee(this.id, editedEmployee).subscribe({
-        next: (response: any) => {
+        next: (response) => {
           this._sharedService.openSnackBar('Employee', 'updated', true);
           this.updatedEmployee.reset();
-          console.log('Employee updated', response.data);
+          console.log('Employee updated', response);
           this.router.navigate(['/employee']);
         },
         error: (err) => {

@@ -1,5 +1,5 @@
-﻿using EMS.Core.Helpers;
-using EMS.Helpers;
+﻿using EMS.Helpers;
+using EMS.Helpers.ErrorHelper;
 using EMS.Models;
 using EMS.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +27,7 @@ namespace EMS.Controllers
                 var result = await _departmentService.GetAllDepartmentsAsync();
 
                 if (result.IsSuccess)
-                    return Ok(result);
+                    return Ok(result.Data);
 
                 return StatusCode((int)result.ErrorCode, result);
             }
@@ -47,7 +47,7 @@ namespace EMS.Controllers
                 var result = await _departmentService.GetDepartmentByIdAsync(departmentId);
 
                 if (result.IsSuccess)
-                    return Ok(result);
+                    return Ok(result.Data);
 
                 return StatusCode((int)result.ErrorCode, result);
 
@@ -68,7 +68,7 @@ namespace EMS.Controllers
                 var result = await _departmentService.CreateDepartmentAsync(department);
 
                 if (result.IsSuccess)
-                    return Ok(result);
+                    return Ok(result.Data);
 
                 return StatusCode((int)result.ErrorCode, result);
             }
@@ -92,7 +92,7 @@ namespace EMS.Controllers
                 var result = await _departmentService.UpdateDepartmentAsync(department);
 
                 if (result.IsSuccess)
-                    return Ok(result);
+                    return Ok(result.Data);
 
                 return StatusCode((int)result.ErrorCode, result);
             }
@@ -111,7 +111,7 @@ namespace EMS.Controllers
                 var result = await _departmentService.DeleteDepartmentAsync(departmentId);
 
                 if (result.IsSuccess)
-                    return Ok(result);
+                    return Ok(result.Data);
 
                 return StatusCode((int)result.ErrorCode, result);
             }

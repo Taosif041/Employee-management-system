@@ -1,4 +1,4 @@
-﻿namespace EMS.Core.Helpers;
+﻿namespace EMS.Helpers.ErrorHelper;
 
 public static class ErrorMessage
 {

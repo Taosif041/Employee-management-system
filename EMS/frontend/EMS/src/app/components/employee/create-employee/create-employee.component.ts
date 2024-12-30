@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -11,6 +11,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { EmployeeService } from '../../../services/employee/employee.service';
 import { Employee } from '../../../models/employee.model';
+import { Router } from '@angular/router';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { ButtonModule } from 'primeng/button';
+import { DatePicker } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-create-employee',
@@ -19,13 +25,20 @@ import { Employee } from '../../../models/employee.model';
     ReactiveFormsModule,
     MatButtonModule,
     MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    ButtonModule,
   ],
   templateUrl: './create-employee.component.html',
   styleUrl: './create-employee.component.css',
+
+  providers: [provideNativeDateAdapter()],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateEmployeeComponent {
   private _sharedService = inject(SharedService);
   private _employeeService = inject(EmployeeService);
+  private router = inject(Router);
 
   newEmployee = new FormGroup({
     officeEmployeeId: new FormControl('', Validators.required),
@@ -42,10 +55,11 @@ export class CreateEmployeeComponent {
       const employee: Employee = this.newEmployee.value as Employee;
 
       this._employeeService.createEmployee(employee).subscribe({
-        next: (response: any) => {
+        next: (response) => {
           this._sharedService.openSnackBar('Employee', 'created', true);
           this.newEmployee.reset();
-          console.log('Employee created', response.data);
+          console.log('Employee created', response);
+          this.router.navigate(['/employee']);
         },
         error: (err) => {
           this._sharedService.openSnackBar(

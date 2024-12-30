@@ -5,7 +5,7 @@ using EMS.Services.Implementations;
 using Microsoft.Extensions.DependencyInjection;
 using EMS.EMS.Repositories.DatabaseProviders.Implementations;
 using EMS.EMS.Repositories.DatabaseProviders.Interfaces;
-using EMS.Models;
+using EMS.Helpers;
 
 public static class ServiceRegistration
 {
@@ -27,9 +27,14 @@ public static class ServiceRegistration
         services.AddScoped<IAttendanceRepository, AttendanceRepository>();
         services.AddScoped<IAttendanceService, AttendanceService>();
 
+        services.AddScoped<ApiResultFactory>();
+
+        services.AddScoped<IConverterService, ConverterService>();
+
         services.AddScoped<IDatabaseFactory, DatabaseFactory>();
 
-        services.AddScoped<ApiResultFactory>();
+
+
 
 
 

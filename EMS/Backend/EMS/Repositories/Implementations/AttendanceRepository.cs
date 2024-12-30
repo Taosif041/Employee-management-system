@@ -12,7 +12,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using MongoDB.Driver.Linq;
 using EMS.EMS.Repositories.DatabaseProviders.Interfaces;
 using EMS.EMS.Repositories.DatabaseProviders.Implementations;
-using EMS.Core.Helpers;
+using EMS.Helpers.ErrorHelper;
 
 
 namespace EMS.Repositories.Implementations

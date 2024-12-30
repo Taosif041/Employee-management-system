@@ -12,29 +12,29 @@ export class DepartmentService {
   constructor(private http: HttpClient) {}
   private allDepartments: Department[] = [];
 
-  getAllDepartments(): Observable<any> {
+  getAllDepartments(): Observable<Department[]> {
     return this.http.get<Department[]>(this.apiUrl);
   }
 
-  setAllDepartments(departments: any): any {
-    this.allDepartments = departments.data;
+  setAllDepartments(departments: Department[]): void {
+    this.allDepartments = departments;
   }
 
-  getDepartmentById(id: number): any {
+  getDepartmentById(id: number): Department | undefined {
     return this.allDepartments.find(
       (department) => department.departmentId === id
     );
   }
 
-  updateDepartment(department: Department, id: number): Observable<any> {
+  updateDepartment(department: Department, id: number): Observable<Department> {
     return this.http.put<Department>(`${this.apiUrl}/${id}`, department);
   }
 
-  createDepartment(department: Department): Observable<any> {
+  createDepartment(department: Department): Observable<Department> {
     return this.http.post<Department>(this.apiUrl, department);
   }
 
-  deleteDepartment(id: number): Observable<any> {
+  deleteDepartment(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

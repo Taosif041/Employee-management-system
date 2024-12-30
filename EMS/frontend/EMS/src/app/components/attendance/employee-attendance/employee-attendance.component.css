@@ -35,6 +35,20 @@ button:hover {
   color: var(--button-hover-color) !important;
 }
 
+.notFoundContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+}
+
+.notFound {
+  width: 400px;
+  text-align: center;
+  color: blue;
+  font-size: 20px;
+}
+
 @media (max-width: 1200px) {
   .EmployeeAttendanceComponentContainer {
     grid-template-columns: repeat(

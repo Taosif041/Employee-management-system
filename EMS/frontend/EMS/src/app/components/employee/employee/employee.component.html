@@ -3,6 +3,15 @@
     <mat-icon>person_add</mat-icon>
     Add new employee
   </button>
+  <button mat-flat-button class="add" (click)="downloadEmployeeCSVData()">
+    <mat-icon>download</mat-icon>
+    Download employee data in CSV format
+  </button>
+
+  <button mat-flat-button class="add" (click)="downloadEmployeeExcelData()">
+    <mat-icon>download</mat-icon>
+    Download employee data in Excel format
+  </button>
   <mat-form-field>
     <mat-label>Filter</mat-label>
     <input
@@ -44,13 +53,17 @@
       <!-- Department ID Column -->
       <ng-container matColumnDef="departmentId">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Department</th>
-        <td mat-cell *matCellDef="let row">{{ row.departmentId }}</td>
+        <td mat-cell *matCellDef="let row">
+          {{ departmentMap[row.departmentId] }}
+        </td>
       </ng-container>
 
       <!-- Designation ID Column -->
       <ng-container matColumnDef="designationId">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Designation</th>
-        <td mat-cell *matCellDef="let row">{{ row.designationId }}</td>
+        <td mat-cell *matCellDef="let row">
+          {{ designationMap[row.designationId] }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="action">
@@ -66,7 +79,7 @@
           <button
             mat-icon-button
             style="color: red"
-            (click)="deleteEmployee(row.employeeId)"
+            (click)="openDialog('0ms', '0ms', row.employeeId)"
           >
             <mat-icon>delete</mat-icon>
           </button>

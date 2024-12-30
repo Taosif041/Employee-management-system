@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System;
 using static EMS.Helpers.Enums;
 using EMS.EMS.Repositories.DatabaseProviders.Interfaces;
-using EMS.Core.Helpers;
+using EMS.Helpers.ErrorHelper;
 
 namespace EMS.Repositories.Implementations
 {

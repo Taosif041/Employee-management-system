@@ -1,4 +1,3 @@
-/* Container for the form */
 .formContainer {
   display: flex;
   flex-direction: column;
@@ -49,7 +48,39 @@ input {
   color: #ffcc00 !important;
 }
 
-/* Responsive styles */
+mat-form-field.full-width {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.mat-input-element {
+  font-size: 14px;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.mat-form-field-wrapper {
+  padding: 0; /* Remove padding around the wrapper */
+}
+
+.mat-form-field-outline {
+  border-width: 1px; /* Match input borders */
+}
+
+.mat-datepicker-toggle {
+  color: #555 !important;
+}
+
+.p-button {
+  background-color: #1e88e5 !important; /* Override primary color for buttons */
+  color: white !important;
+}
+
+.p-calendar {
+  border: 1px solid #1e88e5 !important; /* Calendar border color */
+}
+
 @media (max-width: 600px) {
   .formContainer {
     padding: 10px;
@@ -59,4 +90,7 @@ input {
   .submitButton {
     font-size: 14px;
   }
+}
+mat-form-field {
+  margin: 10px;
 }

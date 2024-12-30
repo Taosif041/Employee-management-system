@@ -1,14 +1,17 @@
-﻿namespace EMS.Models
+﻿using EMS.Models;
+
+namespace EMS.Helpers
 {
     public class ApiResultFactory
     {
-        public ApiResult CreateErrorResult(int errorCode, string errorMessage, List<string> errors =null)
+        public ApiResult CreateErrorResult(int errorCode, string errorMessage, string errorLayer = null, List<string> errors = null)
         {
             return new ApiResult
             {
                 IsSuccess = false,
                 ErrorCode = errorCode,
                 ErrorMessage = errorMessage,
+                ErrorLayer = errorLayer,
                 Errors = errors
             };
         }

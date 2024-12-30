@@ -66,9 +66,11 @@ export class DesignationComponent implements AfterViewInit, OnInit {
   getAllDesignations(): void {
     this._designationService
       .getAllDesignations()
-      .subscribe((designations: any) => {
+      .subscribe((designations: Designation[]) => {
         this._designationService.setAllDesignations(designations);
-        this.dataSource.data = designations.data;
+        console.log(designations);
+
+        this.dataSource.data = designations;
 
         if (this.paginator) {
           this.dataSource.paginator = this.paginator;
@@ -77,24 +79,22 @@ export class DesignationComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit(): void {
-    // Wait for the view initialization to complete
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
 
-    // Apply default sort direction after the view is initialized
     if (this.sort) {
-      this.sort.active = 'designationId'; // Choose the column to be sorted initially
-      this.sort.direction = 'desc'; // Set sort direction to descending
+      this.sort.active = 'designationId';
+      this.sort.direction = 'desc';
       this.dataSource.sort = this.sort;
     }
   }
 
   DeleteDesignation(designationId: number): void {
     this._designationService.deleteDesignation(designationId).subscribe({
-      next: (Response: any) => {
+      next: (Response) => {
         this._sharedService.openSnackBar('Designation', 'deleted', true);
         this.getAllDesignations();
-        console.log('Designation deleted', Response.data);
+        console.log('Designation deleted', Response);
         console.log(Response);
       },
       error: (err) => {
@@ -126,7 +126,7 @@ export class DesignationComponent implements AfterViewInit, OnInit {
       exitAnimationDuration,
     });
 
-    dialogRef.afterClosed().subscribe((result: any) => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.DeleteDesignation(designationId);
       } else {

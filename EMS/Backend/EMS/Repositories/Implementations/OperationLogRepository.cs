@@ -8,7 +8,7 @@ using EMS.Repositories.Interfaces;
 using EMS.Helpers;
 using EMS.EMS.Repositories.DatabaseProviders.Interfaces;
 using static EMS.Helpers.Enums;
-using EMS.Core.Helpers;
+using EMS.Helpers.ErrorHelper;
 
 namespace EMS.Repositories.Implementations
 {

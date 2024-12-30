@@ -9,7 +9,7 @@ using Employee = EMS.Models.Employee;
 using EMS.Helpers;
 using EMS.EMS.Repositories.DatabaseProviders.Interfaces;
 using EMS.EMS.Repositories.DatabaseProviders.Implementations;
-using EMS.Core.Helpers;
+using EMS.Helpers.ErrorHelper;
 
 namespace EMS.Repositories.Implementations
 {
@@ -36,22 +36,17 @@ namespace EMS.Repositories.Implementations
             {
                 try
                 {
-                    // Fetch employees from database
-                    var employees = await connection.QueryAsync<Employee>("GetAllEmployees", commandType: CommandType.StoredProcedure);
+                    var result = await connection.QueryAsync<Employee>("GetAllEmployees", commandType: CommandType.StoredProcedure);
 
-                    // Map Employee list to EmployeeDTO list
-                    var employeeDTOs = EmployeeMapper.ToDTOList(employees.ToList());
+                    //var employeeDTOs = EmployeeMapper.ToDTOList(result.ToList());
 
-                    // Log the operation
                     await _operationLogger.LogOperationAsync(EntityName.Employee, null, OperationType.GetAll);
-
-                    // Return the success result with EmployeeDTO list
-                    return _apiResultFactory.CreateSuccessResult(employeeDTOs);
+                    return _apiResultFactory.CreateSuccessResult(result);
                 }
                 catch (Exception ex)
                 {
-                    // Return error if exception occurs
-                    return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.GET_EMPLOYEE_ERROR);
+                    return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, 
+                        ErrorMessage.GET_EMPLOYEE_ERROR, ErrorLayer.Repository);
                 }
             }
         }
@@ -63,22 +58,18 @@ namespace EMS.Repositories.Implementations
                 var parameters = new { EmployeeId = employeeId };
                 try
                 {
-                    // Fetch employee by ID from database
-                    var employee = await connection.QueryFirstOrDefaultAsync<Employee>("GetEmployeeById", parameters, commandType: CommandType.StoredProcedure);
+                    var result = await connection.QueryFirstOrDefaultAsync<Employee>("GetEmployeeById", parameters, commandType: CommandType.StoredProcedure);
 
-                    // Map the Employee to EmployeeDTO
-                    var employeeDTO = EmployeeMapper.ToDTO(employee);
+                    var employeeDTO = EmployeeMapper.ToDTO(result);
 
-                    // Log the operation
                     await _operationLogger.LogOperationAsync(EntityName.Employee, employeeId, OperationType.GetById);
 
-                    // Return the success result with EmployeeDTO
-                    return _apiResultFactory.CreateSuccessResult(employeeDTO);
+                    return _apiResultFactory.CreateSuccessResult(result);
                 }
                 catch (Exception ex)
                 {
-                    // Return error if exception occurs
-                    return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.GET_EMPLOYEE_ERROR);
+                    return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, 
+                        ErrorMessage.GET_EMPLOYEE_ERROR, ErrorLayer.Repository);
                 }
             }
         }
@@ -100,25 +91,19 @@ namespace EMS.Repositories.Implementations
                 };
                 try
                 {
-                    // Create employee in the database and get the new ID
                     var newId = await connection.ExecuteScalarAsync<int>("CreateEmployee", parameters, commandType: CommandType.StoredProcedure);
 
-                    // Set the new ID for the employee
                     employee.EmployeeId = newId;
 
-                    // Map the created Employee to EmployeeDTO
                     var employeeDTO = EmployeeMapper.ToDTO(employee);
 
-                    // Log the operation
                     await _operationLogger.LogOperationAsync(EntityName.Employee, newId, OperationType.Create);
 
-                    // Return the success result with the created EmployeeDTO
-                    return _apiResultFactory.CreateSuccessResult(employeeDTO);
+                    return _apiResultFactory.CreateSuccessResult(employee);
                 }
                 catch (Exception ex)
                 {
-                    // Return error if exception occurs
-                    return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.CREATE_EMPLOYEE_ERROR);
+                    return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.CREATE_EMPLOYEE_ERROR, ErrorLayer.Repository);
                 }
             }
         }
@@ -129,7 +114,6 @@ namespace EMS.Repositories.Implementations
             {
                 try
                 {
-                    // Get the current employee information to use for updates
                     var currentEmployee = await GetEmployeeByIdAsync(employee.EmployeeId);
 
                     var parameters = new
@@ -144,21 +128,17 @@ namespace EMS.Repositories.Implementations
                         DesignationId = employee.DesignationId ?? currentEmployee.Data.DesignationId
                     };
 
-                    // Update employee information in the database
                     await connection.ExecuteAsync("UpdateEmployeeInformation", parameters, commandType: CommandType.StoredProcedure);
 
-                    // Map the updated Employee to EmployeeDTO
                     var employeeDTO = EmployeeMapper.ToDTO(employee);
 
                     await _operationLogger.LogOperationAsync(EntityName.Employee, employee.EmployeeId, OperationType.Update);
 
-                    // Return the success result with the updated EmployeeDTO
-                    return _apiResultFactory.CreateSuccessResult(employeeDTO);
+                    return _apiResultFactory.CreateSuccessResult(employee);
                 }
                 catch (Exception ex)
                 {
-                    // Return error if exception occurs
-                    return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.UPDATE_EMPLOYEE_ERROR);
+                    return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.UPDATE_EMPLOYEE_ERROR, ErrorLayer.Repository);
                 }
             }
         }
@@ -170,19 +150,15 @@ namespace EMS.Repositories.Implementations
                 var parameters = new { EmployeeId = employeeId };
                 try
                 {
-                    // Delete employee from the database
                     var rowsAffected = await connection.ExecuteAsync("DeleteEmployee", parameters, commandType: CommandType.StoredProcedure);
 
-                    // Log the operation
                     await _operationLogger.LogOperationAsync(EntityName.Employee, employeeId, OperationType.Delete);
 
-                    // Return the success result with the result of delete operation
                     return _apiResultFactory.CreateSuccessResult(rowsAffected > 0);
                 }
                 catch (Exception ex)
                 {
-                    // Return error if exception occurs
-                    return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.DELETE_EMPLOYEE_ERROR);
+                    return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.DELETE_EMPLOYEE_ERROR, ErrorLayer.Repository);
                 }
             }
         }

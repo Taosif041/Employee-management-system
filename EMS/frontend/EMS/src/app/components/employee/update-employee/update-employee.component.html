@@ -55,9 +55,10 @@
       Date of Birth:
       <input
         type="date"
+        [value]="selectedEmployee?.dob | date : 'yyyy-MM-dd'"
+        [placeholder]="selectedEmployee?.dob | date : 'yyyy-MM-dd'"
         formControlName="dob"
         required
-        [value]="selectedEmployee?.dob | date : 'yyyy-MM-dd'"
       />
     </label>
 
@@ -66,8 +67,8 @@
       <input
         type="number"
         formControlName="departmentId"
-        required
         [value]="selectedEmployee?.departmentId"
+        required
       />
     </label>
 

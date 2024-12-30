@@ -8,8 +8,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using EMS.EMS.Repositories.DatabaseProviders.Interfaces;
-using EMS.Core.Helpers;
 using static EMS.Helpers.Enums;
+using EMS.Helpers.ErrorHelper;
 
 namespace EMS.Repositories.Implementations
 {

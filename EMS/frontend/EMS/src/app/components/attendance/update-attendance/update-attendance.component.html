@@ -16,8 +16,9 @@
       <input
         type="date"
         formControlName="date"
-        required
         [value]="selectedAttendance?.date | date : 'yyyy-MM-dd'"
+        [placeholder]="selectedAttendance?.date | date"
+        required
       />
     </label>
 
@@ -26,8 +27,8 @@
       <input
         type="time"
         formControlName="checkInTime"
-        required
         [value]="selectedAttendance?.checkInTime"
+        required
       />
     </label>
 
@@ -36,8 +37,9 @@
       <input
         type="time"
         formControlName="checkOutTime"
-        required
         [value]="selectedAttendance?.checkOutTime"
+        [placeholder]="selectedAttendance?.checkOutTime"
+        required
       />
     </label>
 

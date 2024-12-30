@@ -1,6 +1,5 @@
-﻿using EMS.Core.Helpers;
-using EMS.Helpers;
-using EMS.Models;
+﻿using EMS.Helpers;
+using EMS.Helpers.ErrorHelper;
 using EMS.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -31,7 +30,7 @@ namespace EMS.Controllers
             {
                 var result = await _operationLogService.GetAllLogsAsync();
 
-                if (result.IsSuccess) return Ok(result);
+                if (result.IsSuccess) return Ok(result.Data);
 
                 return StatusCode((int)result.ErrorCode, result);
             }

@@ -1,5 +1,5 @@
-﻿using EMS.Core.Helpers;
-using EMS.Helpers;
+﻿using EMS.Helpers;
+using EMS.Helpers.ErrorHelper;
 using EMS.Models;
 using EMS.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +28,7 @@ namespace EMS.Controllers
             {
                 var result = await _designationService.GetAllDesignationsAsync();
 
-                if (result.IsSuccess)return Ok(result);
+                if (result.IsSuccess)return Ok(result.Data);
 
                 return StatusCode((int)result.ErrorCode, result);
             }
@@ -46,7 +46,7 @@ namespace EMS.Controllers
             {
                 var result = await _designationService.GetDesignationByIdAsync(designationId);
 
-                if (result.IsSuccess) return Ok(result);
+                if (result.IsSuccess) return Ok(result.Data);
 
                 return StatusCode((int)result.ErrorCode, result);
             }
@@ -64,7 +64,7 @@ namespace EMS.Controllers
             {
                 var result = await _designationService.CreateDesignationAsync(designation);
 
-                if (result.IsSuccess) return Ok(result);
+                if (result.IsSuccess) return Ok(result.Data);
 
                 return StatusCode((int)result.ErrorCode, result);
 
@@ -84,7 +84,7 @@ namespace EMS.Controllers
             {
                 var result = await _designationService.UpdateDesignationAsync(designation);
 
-                if (result.IsSuccess) return Ok(result);
+                if (result.IsSuccess) return Ok(result.Data);
 
                 return StatusCode((int)result.ErrorCode, result);
             }
@@ -103,7 +103,7 @@ namespace EMS.Controllers
             {
                 var result = await _designationService.DeleteDesignationAsync(designationId);
 
-                if (result.IsSuccess) return Ok(result);
+                if (result.IsSuccess) return Ok(result.Data);
 
                 return StatusCode((int)result.ErrorCode, result);
             }

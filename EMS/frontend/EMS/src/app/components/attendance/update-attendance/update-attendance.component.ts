@@ -39,7 +39,6 @@ export class UpdateAttendanceComponent implements OnInit {
     this.initializeForm();
   }
 
-  // Initialize the form with the fetched attendance data
   initializeForm(): void {
     if (this.selectedAttendance) {
       this.updatedAttendance = new FormGroup({
@@ -77,9 +76,9 @@ export class UpdateAttendanceComponent implements OnInit {
       this._attendanceService
         .updateAttendance(this.id, editedAttendance)
         .subscribe({
-          next: (response: any) => {
+          next: (response) => {
             this._sharedService.openSnackBar('Attendance', 'updated', true);
-            console.log('Attendance updated', response.data);
+            console.log('Attendance updated', response);
             this.updatedAttendance.reset();
             this.router.navigate(['/attendance']);
           },

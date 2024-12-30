@@ -1,4 +1,4 @@
-﻿namespace EMS.Helpers
+﻿namespace EMS.Helpers.ErrorHelper
 {
     public static class ErrorCode
     {
@@ -7,7 +7,7 @@
 
         public static int BAD_REQUEST = 400;
 
-        public static int UNAUTHORIZED_ERROR = 401; 
-        public static int FORBIDDEN_ERROR = 403; 
+        public static int UNAUTHORIZED_ERROR = 401;
+        public static int FORBIDDEN_ERROR = 403;
     }
 }

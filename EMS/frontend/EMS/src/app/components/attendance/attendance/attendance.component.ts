@@ -58,10 +58,10 @@ export class AttendanceComponent implements AfterViewInit, OnInit {
   getAllAttendances(): void {
     this._attendanceService
       .getAllAttendances()
-      .subscribe((attendances: any) => {
+      .subscribe((attendances: Attendance[]) => {
         this._attendanceService.setAllAttendances(attendances);
         console.log(attendances);
-        this.dataSource.data = attendances.data;
+        this.dataSource.data = attendances;
 
         if (this.paginator) {
           this.dataSource.paginator = this.paginator;

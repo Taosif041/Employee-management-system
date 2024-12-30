@@ -40,11 +40,12 @@ export class CreateDepartmentComponent {
   createNewDepartment() {
     if (this.newDepartment.valid) {
       const department: Department = this.newDepartment.value as Department;
+
       this._departmentService.createDepartment(department).subscribe({
-        next: (Response: any) => {
+        next: (Response) => {
           this._sharedService.openSnackBar('Department', 'created', true);
           this.newDepartment.reset();
-          console.log('Department created', Response.data);
+          console.log('Department created', Response);
           this.router.navigate(['/department']);
         },
         error: (err) => {

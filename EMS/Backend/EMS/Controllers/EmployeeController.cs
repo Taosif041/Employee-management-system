@@ -1,8 +1,12 @@
-﻿using EMS.Core.Helpers;
-using EMS.Helpers;
+﻿using EMS.Helpers;
+using EMS.Helpers.ErrorHelper;
 using EMS.Models;
+using EMS.Services.Implementations;
 using EMS.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
+using ClosedXML.Excel;
+
 
 namespace EMS.Controllers
 {
@@ -12,10 +16,12 @@ namespace EMS.Controllers
     {
         private readonly IEmployeeService _employeeService;
         private readonly ApiResultFactory _apiResultFactory;
-        public EmployeeController(IEmployeeService employeeService, ApiResultFactory apiResultFactory)
+        private readonly IConverterService _converterService;
+        public EmployeeController(IEmployeeService employeeService, ApiResultFactory apiResultFactory, IConverterService converterService)
         {
             _employeeService = employeeService;
             _apiResultFactory = apiResultFactory;
+            _converterService = converterService;
         }
 
 
@@ -33,7 +39,7 @@ namespace EMS.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.GET_EMPLOYEE_ERROR));
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.GET_EMPLOYEE_ERROR, ErrorLayer.Controller));
             }
         }
 
@@ -51,7 +57,7 @@ namespace EMS.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.GET_EMPLOYEE_ERROR));
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.GET_EMPLOYEE_ERROR, ErrorLayer.Controller));
             }
         }
 
@@ -68,7 +74,7 @@ namespace EMS.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.CREATE_EMPLOYEE_ERROR));
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.CREATE_EMPLOYEE_ERROR, ErrorLayer.Controller));
             }
         }
 
@@ -79,7 +85,7 @@ namespace EMS.Controllers
             {
                 if (employeeId != employee.EmployeeId)
                 {
-                    return StatusCode(400, _apiResultFactory.CreateErrorResult(ErrorCode.BAD_REQUEST, ErrorMessage.UPDATE_EMPLOYEE_ERROR));
+                    return StatusCode(400, _apiResultFactory.CreateErrorResult(ErrorCode.BAD_REQUEST, ErrorMessage.UPDATE_EMPLOYEE_ERROR, ErrorLayer.Controller));
                 }
 
                 var result = await _employeeService.UpdateEmployeeInformationAsync(employee);
@@ -91,7 +97,7 @@ namespace EMS.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.UPDATE_EMPLOYEE_ERROR));
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.UPDATE_EMPLOYEE_ERROR, ErrorLayer.Controller));
             }
         }
 
@@ -111,9 +117,53 @@ namespace EMS.Controllers
            
             catch (Exception ex)
             {
-                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.DELETE_EMPLOYEE_ERROR));
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.DELETE_EMPLOYEE_ERROR, ErrorLayer.Controller));
             }
         }
+
+        [HttpGet("download-csv")]
+        public async Task<IActionResult> GetEmGetEmployeeCSVAsync()
+        {
+            try
+            {
+                var result = await _converterService.GetEmployeeCSVAsync();
+                if (result.IsSuccess)
+                {
+                    return File(result.Data, "text/csv", "EmployeeList.csv");
+                }
+                return StatusCode((int)result.ErrorCode, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, "Employee CSV creation Error", ErrorLayer.Controller));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, "Employee CSV creation Error", ErrorLayer.Controller));
+            }
+        }
+
+        [HttpGet("download-xlsx")]
+        public async Task<IActionResult> GetEmployeeExcelAsync()
+        {
+            try
+            {
+                var result = await _converterService.GetEmployeeExcelAsync();
+                if (result.IsSuccess)
+                {
+                    return File(result.Data, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "EmployeeList.xlsx");
+
+                }
+                return StatusCode((int)result.ErrorCode, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, "Employee Excel creation Error", ErrorLayer.Controller));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, "Employee Excel creation Error", ErrorLayer.Controller));
+            }
+        }
+
+
+
+
+
+
+
 
     }
 }

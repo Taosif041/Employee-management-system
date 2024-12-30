@@ -72,9 +72,9 @@ export class UpdateDesignationComponent implements OnInit {
       this._designationService
         .updateDesignation(editedDesignation, this.id)
         .subscribe({
-          next: (response: any) => {
+          next: (response) => {
             this._sharedService.openSnackBar('Designation', 'updated', true);
-            console.log('Designation updated', response.data);
+            console.log('Designation updated', response);
             this.updatedDesignation.reset();
             this.router.navigate(['/designation']);
           },

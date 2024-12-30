@@ -1,5 +1,5 @@
-﻿using EMS.Core.Helpers;
-using EMS.Helpers;
+﻿using EMS.Helpers;
+using EMS.Helpers.ErrorHelper;
 using EMS.Models;
 using EMS.Repositories.Interfaces;
 using EMS.Services.Interfaces;
@@ -21,13 +21,14 @@ namespace EMS.Services.Implementations
         {
             try
             {
-                var employees = await _employeeRepository.GetAllEmployeesAsync();
-                var resultDTOs = EmployeeMapper.ToDTOList(employees);
-                return resultDTOs; 
+                var result = await _employeeRepository.GetAllEmployeesAsync();
+                var resultDTOs = EmployeeMapper.ToDTOList(result.Data);
+                return result; 
             }
             catch (Exception ex)
             {
-                return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.GET_EMPLOYEE_ERROR);
+                return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, 
+                    ErrorMessage.GET_EMPLOYEE_ERROR, ErrorLayer.Service);
             }
         }
 
@@ -41,7 +42,8 @@ namespace EMS.Services.Implementations
             }
             catch (Exception ex)
             {
-                return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.GET_EMPLOYEE_ERROR);
+                return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, 
+                    ErrorMessage.GET_EMPLOYEE_ERROR, ErrorLayer.Service);
             }
         }
         public async Task<ApiResult> CreateEmployeeAsync(Employee employee)
@@ -53,7 +55,8 @@ namespace EMS.Services.Implementations
             }
             catch (Exception ex)
             {
-                return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.CREATE_EMPLOYEE_ERROR);
+                return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, 
+                    ErrorMessage.CREATE_EMPLOYEE_ERROR, ErrorLayer.Service);
             }
         }
 
@@ -67,7 +70,8 @@ namespace EMS.Services.Implementations
 
             catch (Exception ex)
             {
-                return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.UPDATE_EMPLOYEE_ERROR);
+                return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, 
+                    ErrorMessage.UPDATE_EMPLOYEE_ERROR, ErrorLayer.Service);
             }
         }
         public async Task<ApiResult> DeleteEmployeeAsync(int employeeId)
@@ -79,7 +83,8 @@ namespace EMS.Services.Implementations
             }
             catch (Exception ex)
             {
-                return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.DELETE_EMPLOYEE_ERROR);
+                return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, 
+                    ErrorMessage.DELETE_EMPLOYEE_ERROR, ErrorLayer.Service);
             }
         }
 

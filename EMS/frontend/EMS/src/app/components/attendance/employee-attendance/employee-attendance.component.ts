@@ -11,10 +11,11 @@ import { MatListModule } from '@angular/material/list';
 
 import { AttendanceService } from '../../../services/attendance/attendance.service';
 import { Attendance } from '../../../models/attendance.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-employee-attendance',
-  imports: [MatCardModule, MatListModule, RouterLink],
+  imports: [MatCardModule, MatListModule, RouterLink, CommonModule],
   templateUrl: './employee-attendance.component.html',
   styleUrls: ['./employee-attendance.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -32,23 +33,19 @@ export class EmployeeAttendanceComponent implements OnInit {
   }
 
   getAllAttendanceByEmployeeId() {
-    // Check if data is already in sessionStorage
     const storedAttendances = sessionStorage.getItem(
       `attendance_${this.employeeId}`
     );
 
     if (storedAttendances) {
-      // If found in sessionStorage, use the data from there
       this.attendances = JSON.parse(storedAttendances);
       console.log('Loaded attendance from sessionStorage');
     } else {
-      // If not in sessionStorage, fetch data from the service
       const result = this._attendanceService.getDesignationById(
         this.employeeId
       );
       if (result && result.length > 0) {
         this.attendances = result;
-        // Store the fetched data in sessionStorage for future use
         sessionStorage.setItem(
           `attendance_${this.employeeId}`,
           JSON.stringify(this.attendances)

@@ -31,16 +31,15 @@ export class EmployeeProfileComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Retrieve the 'id' parameter from the URL
-    this.employeeId = +this.route.snapshot.paramMap.get('id')!; // Use the correct parameter name ('id')
+    this.employeeId = +this.route.snapshot.paramMap.get('id')!;
     this.getEmployeeById(this.employeeId);
     console.log('employeeId ->', this.employeeId);
   }
 
   getEmployeeById(id: number): void {
     this._employeeService.getEmployeeById(id).subscribe(
-      (employee: any) => {
-        this.selectedEmployee = employee.data; // Do something with the employee data
+      (employee: Employee) => {
+        this.selectedEmployee = employee;
       },
       (error) => {
         console.error('Error fetching employee by ID:', error);

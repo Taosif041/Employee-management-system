@@ -68,7 +68,7 @@ export class UpdateDepartmentComponent implements OnInit {
       this._departmentService
         .updateDepartment(editedDepartment, this.id)
         .subscribe({
-          next: (response: any) => {
+          next: (response) => {
             this._sharedService.openSnackBar('Department', 'updated', true);
             console.log('Department updated', response);
             this.updatedDepartment.reset();

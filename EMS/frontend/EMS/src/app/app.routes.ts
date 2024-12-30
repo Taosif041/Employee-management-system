@@ -16,6 +16,7 @@ import { UpdateDepartmentComponent } from './components/department/update-depart
 import { CreateDesignationComponent } from './components/designation/create-designation/create-designation.component';
 import { UpdateDesignationComponent } from './components/designation/update-designation/update-designation.component';
 import { EmployeeAttendanceComponent } from './components/attendance/employee-attendance/employee-attendance.component';
+import { DemoButtonComponent } from './components/test/demo-button/demo-button.component';
 
 export const routes: Routes = [
   { path: 'employee', component: EmployeeComponent },
@@ -38,5 +39,6 @@ export const routes: Routes = [
 
   { path: 'log', component: LogComponent },
 
+  { path: 'demo', component: DemoButtonComponent },
   { path: '', redirectTo: '/employee', pathMatch: 'full' },
 ];

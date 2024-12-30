@@ -13,35 +13,32 @@ export class DesignationService {
 
   private allDesignations: Designation[] = [];
 
-  // Get all designations
-  getAllDesignations(): Observable<any> {
+  getAllDesignations(): Observable<Designation[]> {
     return this.http.get<Designation[]>(this.apiUrl);
   }
 
-  // Set the local list of designations
-  setAllDesignations(designations: any): any {
-    this.allDesignations = designations.data;
+  setAllDesignations(designations: Designation[]): void {
+    this.allDesignations = designations;
   }
 
-  // Get a designation by ID from the stored list
-  getDesignationById(id: number): any {
+  getDesignationById(id: number): Designation | undefined {
     return this.allDesignations.find(
       (designation) => designation.designationId === id
     );
   }
 
-  // Update a designation
-  updateDesignation(designation: Designation, id: number): Observable<any> {
+  updateDesignation(
+    designation: Designation,
+    id: number
+  ): Observable<Designation> {
     return this.http.put<Designation>(`${this.apiUrl}/${id}`, designation);
   }
 
-  // Create a new designation
-  createDesignation(designation: Designation): Observable<any> {
+  createDesignation(designation: Designation): Observable<Designation> {
     return this.http.post<Designation>(this.apiUrl, designation);
   }
 
-  // Delete a designation
-  deleteDesignation(id: number): Observable<any> {
+  deleteDesignation(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }
