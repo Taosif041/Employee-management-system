@@ -85,4 +85,36 @@ export class AttendanceComponent implements AfterViewInit, OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
+
+  downloadAttendanceCSVData(): void {
+    this._attendanceService.getAttendanceCSVData().subscribe(
+      (response: Blob) => {
+        const url = window.URL.createObjectURL(response);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'AttendanceData.csv'; // Specify the CSV file name
+        link.click();
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {
+        console.error('CSV download failed', error);
+      }
+    );
+  }
+
+  downloadAttendanceExcelData(): void {
+    this._attendanceService.getAttendanceExcelData().subscribe(
+      (response: Blob) => {
+        const url = window.URL.createObjectURL(response);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'AttendanceData.xlsx'; // Specify the Excel file name
+        link.click();
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {
+        console.error('Excel download failed', error);
+      }
+    );
+  }
 }

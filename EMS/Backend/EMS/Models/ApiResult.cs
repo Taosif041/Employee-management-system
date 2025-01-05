@@ -3,8 +3,11 @@
     public class ApiResult
     {
         public bool IsSuccess { get; set; } = true;
+
         public int? ErrorCode { get; set; }
+
         public string? ErrorMessage { get; set; }
+
         public string? ErrorLayer { get; set; }
 
         public List<string>? Errors { get; set; }    

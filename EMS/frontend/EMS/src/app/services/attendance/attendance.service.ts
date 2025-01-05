@@ -52,4 +52,16 @@ export class AttendanceService {
   updateAttendance(id: number, attendance: Attendance): Observable<Attendance> {
     return this.http.put<Attendance>(`${this.apiUrl}/${id}`, attendance);
   }
+
+  getAttendanceCSVData(): Observable<Blob> {
+    return this.http.get<Blob>(`${this.apiUrl}/download-csv`, {
+      responseType: 'blob' as 'json',
+    });
+  }
+
+  getAttendanceExcelData(): Observable<Blob> {
+    return this.http.get<Blob>(`${this.apiUrl}/download-xlsx`, {
+      responseType: 'blob' as 'json',
+    });
+  }
 }

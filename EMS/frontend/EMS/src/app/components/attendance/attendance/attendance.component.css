@@ -30,9 +30,9 @@ th {
 }
 
 .add {
-  background-color: #333 !important; /* Custom background color */
-  color: white !important; /* Text color */
-  position: relative; /* Required for positioning the pseudo-element */
+  background-color: #333 !important;
+  color: white !important;
+  margin-left: 10px;
 }
 
 .add:hover {

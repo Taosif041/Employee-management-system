@@ -1,6 +1,7 @@
 ﻿using EMS.Helpers;
 using EMS.Helpers.ErrorHelper;
 using EMS.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace EMS.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class OperationLogController : ControllerBase
     {
         private readonly IOperationLogService _operationLogService;

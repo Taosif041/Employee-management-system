@@ -64,7 +64,6 @@ export class UpdateEmployeeComponent implements OnInit {
       (employee) => {
         this.selectedEmployee = employee;
 
-        // Populate the form using patchValue
         this.updatedEmployee.patchValue({
           employeeId: this.id,
           officeEmployeeId: employee.officeEmployeeId,
@@ -86,8 +85,6 @@ export class UpdateEmployeeComponent implements OnInit {
   handleSubmit() {
     if (this.updatedEmployee.valid) {
       const editedEmployee: Employee = this.updatedEmployee.value as Employee;
-      console.log('editedEmployee', editedEmployee);
-      console.log('editedEmployee.dob -> ', editedEmployee.dob);
 
       this._employeeService.updateEmployee(this.id, editedEmployee).subscribe({
         next: (response) => {

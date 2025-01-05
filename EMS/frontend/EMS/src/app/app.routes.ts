@@ -17,6 +17,9 @@ import { CreateDesignationComponent } from './components/designation/create-desi
 import { UpdateDesignationComponent } from './components/designation/update-designation/update-designation.component';
 import { EmployeeAttendanceComponent } from './components/attendance/employee-attendance/employee-attendance.component';
 import { DemoButtonComponent } from './components/test/demo-button/demo-button.component';
+import { InputComponent } from './components/test/input/input.component';
+import { ParentComponent } from './components/test/parent/parent.component';
+import { ChildComponent } from './components/test/child/child.component';
 
 export const routes: Routes = [
   { path: 'employee', component: EmployeeComponent },
@@ -40,5 +43,9 @@ export const routes: Routes = [
   { path: 'log', component: LogComponent },
 
   { path: 'demo', component: DemoButtonComponent },
+  { path: 'input', component: InputComponent },
+  { path: 'parent', component: ParentComponent },
+  { path: 'child', component: ChildComponent },
+
   { path: '', redirectTo: '/employee', pathMatch: 'full' },
 ];

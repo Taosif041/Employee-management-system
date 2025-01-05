@@ -1,0 +1,5 @@
+<div>
+  <button (click)="approveTask()" [disabled]="task.approved">
+    {{ task.approved ? "Approved" : "Approve" }}
+  </button>
+</div>

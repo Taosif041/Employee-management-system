@@ -4,12 +4,13 @@
     {
         public enum OperationType
         {
+            GET,
             GetAll,
             GetById,
             Create,
             Update,
             Delete,
-
+            Authenticate
         }
         public enum EntityName
         {
@@ -18,7 +19,8 @@
             Department,
             Operation,
             Attendance,
-
+            User,
+            RefreshToken
         }
         public enum DatabaseType
         {
@@ -26,7 +28,5 @@
             PostgreSql,
             MongoDb
         }
-
-
     }
 }

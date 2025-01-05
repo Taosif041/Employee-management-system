@@ -6,12 +6,14 @@ using EMS.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using ClosedXML.Excel;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace EMS.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EmployeeController: ControllerBase
     {
         private readonly IEmployeeService _employeeService;

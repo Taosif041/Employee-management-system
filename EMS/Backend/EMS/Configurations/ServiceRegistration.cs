@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using EMS.EMS.Repositories.DatabaseProviders.Implementations;
 using EMS.EMS.Repositories.DatabaseProviders.Interfaces;
 using EMS.Helpers;
+using EMS.Services;
 
 public static class ServiceRegistration
 {
@@ -27,17 +28,20 @@ public static class ServiceRegistration
         services.AddScoped<IAttendanceRepository, AttendanceRepository>();
         services.AddScoped<IAttendanceService, AttendanceService>();
 
+        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+
+        services.AddScoped<ILoginRepository, LogInRepository>();
+        services.AddScoped<ILoginService, LoginService>();
+
+        services.AddScoped<ITokenService, TokenService>();
+        services.AddLogging();  // <-- Add this line
+
+
+
         services.AddScoped<ApiResultFactory>();
 
         services.AddScoped<IConverterService, ConverterService>();
 
         services.AddScoped<IDatabaseFactory, DatabaseFactory>();
-
-
-
-
-
-
-
     }
 }

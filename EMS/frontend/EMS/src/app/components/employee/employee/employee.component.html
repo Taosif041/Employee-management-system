@@ -3,6 +3,7 @@
     <mat-icon>person_add</mat-icon>
     Add new employee
   </button>
+
   <button mat-flat-button class="add" (click)="downloadEmployeeCSVData()">
     <mat-icon>download</mat-icon>
     Download employee data in CSV format
@@ -12,6 +13,7 @@
     <mat-icon>download</mat-icon>
     Download employee data in Excel format
   </button>
+
   <mat-form-field>
     <mat-label>Filter</mat-label>
     <input
@@ -69,10 +71,13 @@
       <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
         <td mat-cell *matCellDef="let row">
+          <button mat-icon-button routerLink="/input" style="color: #333">
+            <mat-icon>input</mat-icon>
+          </button>
           <button
             mat-icon-button
-            [routerLink]="['/employeeProfile', row.employeeId]"
             style="color: #333"
+            (click)="navigateToInput(row.employeeId)"
           >
             <mat-icon>edit</mat-icon>
           </button>
@@ -104,3 +109,7 @@
     ></mat-paginator>
   </div>
 </div>
+<!-- <app-employee-profile
+  *ngIf="selectedEmployeeId"
+  [employeeId]="selectedEmployeeId"
+></app-employee-profile> -->

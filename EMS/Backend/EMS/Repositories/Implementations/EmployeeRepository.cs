@@ -38,7 +38,6 @@ namespace EMS.Repositories.Implementations
                 {
                     var result = await connection.QueryAsync<Employee>("GetAllEmployees", commandType: CommandType.StoredProcedure);
 
-                    //var employeeDTOs = EmployeeMapper.ToDTOList(result.ToList());
 
                     await _operationLogger.LogOperationAsync(EntityName.Employee, null, OperationType.GetAll);
                     return _apiResultFactory.CreateSuccessResult(result);

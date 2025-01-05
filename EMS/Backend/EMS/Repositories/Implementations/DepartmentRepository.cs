@@ -70,14 +70,13 @@ namespace EMS.Repositories.Implementations
         {
             using (IDbConnection connection = _databaseFactory.CreateSqlServerConnection())
             {
+                var parameters = new
+                {
+                    department.Name
+                };
 
                 try
                 {
-
-                    var parameters = new
-                    {
-                        department.Name
-                    };
 
                     var newId = await connection.ExecuteScalarAsync<int>("CreateDepartment", parameters, commandType: CommandType.StoredProcedure);
                     department.DepartmentId = newId;

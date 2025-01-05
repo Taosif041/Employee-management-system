@@ -8,12 +8,14 @@ using System;
 using System.Threading.Tasks;
 using System.Text;
 using ClosedXML.Excel;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace EMS.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AttendanceController : ControllerBase
     {
         private readonly IAttendanceService _attendanceService;
@@ -43,9 +45,10 @@ namespace EMS.Controllers
 
                 if (result.IsSuccess) return Ok(result.Data);
 
-                return StatusCode((int)result.ErrorCode, result);
+                return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.GET_ATTENDANCE_ERROR));
+
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.GET_ATTENDANCE_ERROR));
             }
@@ -62,7 +65,7 @@ namespace EMS.Controllers
 
                 return StatusCode((int)result.ErrorCode, result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.GET_ATTENDANCE_ERROR));
             }

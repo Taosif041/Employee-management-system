@@ -2,17 +2,19 @@
 using EMS.Helpers.ErrorHelper;
 using EMS.Models;
 using EMS.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EMS.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class DepartmentController : ControllerBase
     {
         private readonly IDepartmentService _departmentService;
         private readonly ApiResultFactory _apiResultFactory;
-
+        
         public DepartmentController(IDepartmentService departmentService, ApiResultFactory apiResultFactory)
         {
             _departmentService = departmentService;

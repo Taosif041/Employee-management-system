@@ -7,7 +7,14 @@
 
         public static int BAD_REQUEST = 400;
 
-        public static int UNAUTHORIZED_ERROR = 401;
+        public static int INVALID_CREDENTIALS = 401;
+        public static int SESSION_EXPIRED = 401;
+
+
         public static int FORBIDDEN_ERROR = 403;
+
+
+        public static int ALREADY_EXIST_ERROR = 409;
+        
     }
 }

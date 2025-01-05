@@ -1,15 +1,19 @@
-﻿public static class CorsConfiguration
+﻿namespace EMS.Configurations
 {
-    public static void AddCorsServices(this IServiceCollection services)
+    public static class CorsConfiguration
     {
-        services.AddCors(options =>
+        public static void AddCorsServices(this IServiceCollection services)
         {
-            options.AddPolicy("AllowAngularApp", policy =>
+            services.AddCors(options =>
             {
-                policy.WithOrigins("http://localhost:4200") // Replace with your frontend URL
-                    .AllowAnyHeader()
-                    .AllowAnyMethod();
+                options.AddPolicy("AllowAngularApp", policy =>
+                {
+                    policy.WithOrigins("http://localhost:4200")
+                        .AllowAnyHeader()                       
+                        .AllowAnyMethod()                       
+                        .AllowCredentials();                   
+                });
             });
-        });
+        }
     }
 }

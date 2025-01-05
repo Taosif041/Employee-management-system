@@ -2,6 +2,7 @@
 using EMS.Helpers.ErrorHelper;
 using EMS.Models;
 using EMS.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace EMS.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class DesignationController : ControllerBase
     {
         private readonly IDesignationService _designationService;

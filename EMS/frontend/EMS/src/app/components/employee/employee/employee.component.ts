@@ -7,7 +7,7 @@ import {
   EventEmitter,
   inject,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -18,6 +18,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
+import { Router } from '@angular/router';
 
 import { EmployeeService } from '../../../services/employee/employee.service';
 import { Employee } from '../../../models/employee.model';
@@ -55,6 +56,7 @@ export class EmployeeComponent implements AfterViewInit, OnInit {
 
   private _departmentService = inject(DepartmentService);
   private _designationService = inject(DesignationService);
+  private router = inject(Router);
 
   displayedColumns: string[] = [
     'employeeId',
@@ -208,5 +210,11 @@ export class EmployeeComponent implements AfterViewInit, OnInit {
         console.error('Excel download failed', error);
       }
     );
+  }
+  selectedEmployeeId: number = 0;
+
+  navigateToInput(employeeId: number) {
+    this.selectedEmployeeId = employeeId;
+    this.router.navigate(['/employeeProfile', employeeId]);
   }
 }

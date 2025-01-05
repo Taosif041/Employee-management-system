@@ -29,7 +29,7 @@ namespace EMS.Services.Implementations
             }
             catch (Exception ex)
             {
-                return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.GET_DEPARTMENT_ERROR);
+                return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.GET_DEPARTMENT_ERROR, ErrorLayer.Service);
             }
         }
 
@@ -42,7 +42,7 @@ namespace EMS.Services.Implementations
             }
             catch (Exception ex)
             {
-                return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.GET_DEPARTMENT_ERROR);
+                return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.GET_DEPARTMENT_ERROR, ErrorLayer.Service);
             }
         }
 
@@ -60,7 +60,7 @@ namespace EMS.Services.Implementations
             }
             catch (Exception ex)
             {
-                return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.CREATE_DEPARTMENT_ERROR);
+                return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.CREATE_DEPARTMENT_ERROR, ErrorLayer.Service);
             }
         }
 
@@ -78,7 +78,7 @@ namespace EMS.Services.Implementations
             }
             catch (Exception ex)
             {
-                return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.UPDATE_DEPARTMENT_ERROR);
+                return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.UPDATE_DEPARTMENT_ERROR, ErrorLayer.Service);
             }
         }
 
@@ -96,7 +96,7 @@ namespace EMS.Services.Implementations
             }
             catch (Exception ex)
             {
-                return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.DELETE_DEPARTMENT_ERROR);
+                return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.DELETE_DEPARTMENT_ERROR, ErrorLayer.Service);
             }
         }
     }

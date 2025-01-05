@@ -22,6 +22,30 @@ public static class ErrorMessage
     public const string UPDATE_ATTENDANCE_ERROR = "Failed to update attendance";
     public const string GET_ATTENDANCE_ERROR = "An error occured while fetching attendance data";
 
+    public const string REGISTER_USER_ERROR = "Failed to register user";
+    public const string DELETE_USER_ERROR = "Failed to delete user";
+    public const string UPDATE_USER_ERROR = "Failed to update user";
+    public const string GET_USER_ERROR = "An error occured while fetching user data";
+    public const string AUTHENTICATION_USER_ERROR = "An error occured while authenticating user data";
+
+
+    public const string ADD_TOKEN_ERROR = "Failed to add TOKEN";
+    public const string DELETE_TOKEN_ERROR = "Failed to delete TOKEN";
+    public const string UPDATE_TOKEN_ERROR = "Failed to update TOKEN";
+    public const string GET_TOKEN_ERROR = "An error occured while fetching TOKEN data";
+
+
+    public const string USERNAME_NOT_FOUND = "The username not found";
+    public const string USERNAME_ALREADY_EXIST = "The username already exist";
+    public const string EMAIL_ALREADY_EXIST = "The email already exist";
+
+
+    public const string LOG_IN_ERROR = "An error occured while logging in"; 
+    public const string LOG_OUT_ERROR = "An error occured while logging out"; 
+    public const string INVALID_CREDENTIALS = "You have provided invalid credentials"; 
+    public const string SESSION_EXPIRED = "Invalid or expired session"; 
+
+
     public const string CREATE_LOG_ERROR = "Failed to create log";
     public const string GET_LOG_ERROR = "An error occured while fetching log data";
 
