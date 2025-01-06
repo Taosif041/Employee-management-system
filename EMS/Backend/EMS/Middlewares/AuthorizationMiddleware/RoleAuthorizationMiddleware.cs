@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using EMS.Services.Interfaces;
+using System.Security.Claims;
 
 namespace EMS.Middlewares.AuthorizationMiddleware
 {
@@ -17,10 +18,8 @@ namespace EMS.Middlewares.AuthorizationMiddleware
 
             if (!string.IsNullOrEmpty(userId))
             {
-                // Get user role from the database
                 var role = await roleService.GetRoleByUserIdAsync(int.Parse(userId));
 
-                // Add role to claims
                 if (role != null)
                 {
                     var claims = new List<Claim> { new Claim(ClaimTypes.Role, role.ToString()) };

@@ -11,7 +11,6 @@ namespace EMS.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class DesignationController : ControllerBase
     {
         private readonly IDesignationService _designationService;
@@ -24,6 +23,7 @@ namespace EMS.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "UserPolicy")]
         public async Task<IActionResult> GetAllDesignationAsync()
         {
             try
@@ -42,6 +42,7 @@ namespace EMS.Controllers
         }
 
         [HttpGet("{designationId}")]
+        [Authorize(Policy = "UserPolicy")]
         public async Task<IActionResult> GetDesignationByIdAsync(int designationId)
         {
             try
@@ -60,6 +61,7 @@ namespace EMS.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> CreateDesignationAsync([FromBody] Designation designation)
         {
             try
@@ -80,6 +82,7 @@ namespace EMS.Controllers
         }
 
         [HttpPut("{designationId}")]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> UpdateDesignationAsync(int designationId, [FromBody] Designation designation)
         {
             try
@@ -99,6 +102,7 @@ namespace EMS.Controllers
         }
 
         [HttpDelete("{designationId}")]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> DeleteDesignationAsync(int designationId)
         {
             try

@@ -1,11 +1,11 @@
 ﻿using EMS.Models;
 
-namespace EMS.Services.Interfaces
+namespace EMS.Repositories.Interfaces
 {
-    public interface IRoleService
+    public interface IRoleRepository
     {
         Task<ApiResult> AssignRoleToUserIdAsync(int userId, int role);
         Task<ApiResult> GetRoleByUserIdAsync(int userId);
-    }
 
+    }
 }

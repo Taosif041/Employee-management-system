@@ -13,7 +13,6 @@ namespace EMS.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class EmployeeController: ControllerBase
     {
         private readonly IEmployeeService _employeeService;
@@ -29,6 +28,7 @@ namespace EMS.Controllers
 
 
         [HttpGet]
+        [Authorize(Policy = "UserPolicy")]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -37,7 +37,7 @@ namespace EMS.Controllers
 
                 if (result.IsSuccess)return Ok(result.Data);
 
-                return StatusCode((int)result.ErrorCode, result);
+                return StatusCode((int)result.ErrorCode, _apiResultFactory.CreateErrorResult((int)result.ErrorCode, result.ErrorMessage, result.ErrorLayer));
             }
             catch (Exception ex)
             {
@@ -46,6 +46,7 @@ namespace EMS.Controllers
         }
 
         [HttpGet("{employeeId}")]
+        [Authorize(Policy = "UserPolicy")]
         public async Task<IActionResult> GetEmployeeByIdAsync(int employeeId)
         {
             try
@@ -54,7 +55,8 @@ namespace EMS.Controllers
 
                 if (result.IsSuccess)
                     return Ok(result.Data);
-                return StatusCode((int)result.ErrorCode, result);
+
+                return StatusCode((int)result.ErrorCode, _apiResultFactory.CreateErrorResult((int)result.ErrorCode, result.ErrorMessage, result.ErrorLayer));
 
             }
             catch (Exception ex)
@@ -64,6 +66,7 @@ namespace EMS.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> CreateEmployee(Employee employee)
         {
             try
@@ -72,7 +75,7 @@ namespace EMS.Controllers
                 if (result.IsSuccess)
                     return Ok(result.Data);
 
-                return StatusCode((int)result.ErrorCode, result);
+                return StatusCode((int)result.ErrorCode, _apiResultFactory.CreateErrorResult((int)result.ErrorCode, result.ErrorMessage, result.ErrorLayer));
             }
             catch (Exception ex)
             {
@@ -81,6 +84,7 @@ namespace EMS.Controllers
         }
 
         [HttpPut("{employeeId}")]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> UpdateEmployee(int employeeId, Employee employee)
         {
             try
@@ -95,7 +99,7 @@ namespace EMS.Controllers
                 if (result.IsSuccess)
                     return Ok(result.Data);
 
-                return StatusCode((int)result.ErrorCode, result);
+                return StatusCode((int)result.ErrorCode, _apiResultFactory.CreateErrorResult((int)result.ErrorCode, result.ErrorMessage, result.ErrorLayer));
             }
             catch (Exception ex)
             {
@@ -105,6 +109,7 @@ namespace EMS.Controllers
 
 
         [HttpDelete("{employeeId}")]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> DeleteEmployee(int employeeId)
         {
             try
@@ -114,7 +119,7 @@ namespace EMS.Controllers
                 if (result.IsSuccess)
                     return Ok(result.Data);
 
-                return StatusCode((int)result.ErrorCode, result);
+                return StatusCode((int)result.ErrorCode, _apiResultFactory.CreateErrorResult((int)result.ErrorCode, result.ErrorMessage, result.ErrorLayer));
             }
            
             catch (Exception ex)
@@ -124,6 +129,7 @@ namespace EMS.Controllers
         }
 
         [HttpGet("download-csv")]
+        [Authorize(Policy = "UserPolicy")]
         public async Task<IActionResult> GetEmGetEmployeeCSVAsync()
         {
             try
@@ -133,7 +139,8 @@ namespace EMS.Controllers
                 {
                     return File(result.Data, "text/csv", "EmployeeList.csv");
                 }
-                return StatusCode((int)result.ErrorCode, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, "Employee CSV creation Error", ErrorLayer.Controller));
+
+                return StatusCode((int)result.ErrorCode, _apiResultFactory.CreateErrorResult((int)result.ErrorCode, result.ErrorMessage, result.ErrorLayer));
             }
             catch (Exception ex)
             {
@@ -142,6 +149,7 @@ namespace EMS.Controllers
         }
 
         [HttpGet("download-xlsx")]
+        [Authorize(Policy = "UserPolicy")]
         public async Task<IActionResult> GetEmployeeExcelAsync()
         {
             try
@@ -152,20 +160,14 @@ namespace EMS.Controllers
                     return File(result.Data, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "EmployeeList.xlsx");
 
                 }
-                return StatusCode((int)result.ErrorCode, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, "Employee Excel creation Error", ErrorLayer.Controller));
+
+                return StatusCode((int)result.ErrorCode, _apiResultFactory.CreateErrorResult((int)result.ErrorCode, result.ErrorMessage, result.ErrorLayer));
             }
             catch (Exception ex)
             {
                 return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, "Employee Excel creation Error", ErrorLayer.Controller));
             }
         }
-
-
-
-
-
-
-
 
     }
 }

@@ -15,7 +15,6 @@ namespace EMS.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class AttendanceController : ControllerBase
     {
         private readonly IAttendanceService _attendanceService;
@@ -37,6 +36,7 @@ namespace EMS.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "UserPolicy")]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -55,6 +55,7 @@ namespace EMS.Controllers
         }
 
         [HttpGet("{employeeId}/{date}")]
+        [Authorize(Policy = "UserPolicy")]
         public async Task<IActionResult> GetAttendanceByEmployeeIdAndDateAsync(int employeeId, DateTime date)
         {
             try
@@ -72,6 +73,7 @@ namespace EMS.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> CreateAttendance([FromBody] Attendance attendance)
         {
             try
@@ -95,6 +97,7 @@ namespace EMS.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> UpdateAttendance([FromBody] Attendance attendance)
         {
             try
@@ -114,6 +117,7 @@ namespace EMS.Controllers
         }
 
         [HttpDelete("{employeeId}/{date}")]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> DeleteAttendance(int employeeId, DateTime date)
         {
             try
@@ -131,6 +135,7 @@ namespace EMS.Controllers
             }
         }
         [HttpGet("download-csv")]
+        [Authorize(Policy = "UserPolicy")]
         public async Task<IActionResult> GetAttendanceCSVAsync()
         {
             try
@@ -155,6 +160,7 @@ namespace EMS.Controllers
         }
 
         [HttpGet("download-xlsx")]
+        [Authorize(Policy = "UserPolicy")]
         public async Task<IActionResult> GetAttendanceExcelAsync()
         {
             try

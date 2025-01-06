@@ -9,7 +9,6 @@ namespace EMS.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class DepartmentController : ControllerBase
     {
         private readonly IDepartmentService _departmentService;
@@ -22,6 +21,7 @@ namespace EMS.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "UserPolicy")]
         public async Task<IActionResult> GetAllDepartmentAsync()
         {
             try
@@ -42,6 +42,7 @@ namespace EMS.Controllers
 
 
         [HttpGet("{departmentId}")]
+        [Authorize(Policy = "UserPolicy")]
         public async Task<IActionResult> GetDepartmentByIdAsync(int departmentId)
         {
             try
@@ -63,6 +64,7 @@ namespace EMS.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> CreateDepartmentAsync(Department department)
         {
             try
@@ -82,6 +84,7 @@ namespace EMS.Controllers
         }
 
         [HttpPut("{departmentId}")]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> UpdateDepartmentAsync(int departmentId, Department department)
         {
             try
@@ -106,6 +109,7 @@ namespace EMS.Controllers
         }
 
         [HttpDelete("{departmentId}")]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> DeleteDepartment(int departmentId)
         {
             try

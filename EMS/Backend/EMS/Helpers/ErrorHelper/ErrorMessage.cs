@@ -36,6 +36,7 @@ public static class ErrorMessage
 
 
     public const string USERNAME_NOT_FOUND = "The username not found";
+    public const string USER_NOT_FOUND = "The user not found";
     public const string USERNAME_ALREADY_EXIST = "The username already exist";
     public const string EMAIL_ALREADY_EXIST = "The email already exist";
 
@@ -44,6 +45,9 @@ public static class ErrorMessage
     public const string LOG_OUT_ERROR = "An error occured while logging out"; 
     public const string INVALID_CREDENTIALS = "You have provided invalid credentials"; 
     public const string SESSION_EXPIRED = "Invalid or expired session"; 
+
+
+    public const string AUTHORIZATION_ERROR = "Authorization error"; 
 
 
     public const string CREATE_LOG_ERROR = "Failed to create log";

@@ -9,11 +9,31 @@ namespace EMS.Configurations
         {
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("UserPolicy", policy => policy.RequireRole("0"));
-                options.AddPolicy("AdminPolicy", policy => policy.RequireRole("1"));
-                options.AddPolicy("SuperAdminPolicy", policy => policy.RequireRole("2"));
+                options.AddPolicy("UserPolicy", policy =>
+                {
+                    policy.RequireAssertion(context =>
+                        context.User.IsInRole("User") || context.User.IsInRole("0") ||
+
+                        context.User.IsInRole("Admin") || context.User.IsInRole("1") ||
+
+                        context.User.IsInRole("SuperAdmin") || context.User.IsInRole("2"));
+                });
+
+                options.AddPolicy("AdminPolicy", policy =>
+                {
+                    policy.RequireAssertion(context =>
+                        context.User.IsInRole("Admin") || context.User.IsInRole("1") ||
+
+                        context.User.IsInRole("SuperAdmin") || context.User.IsInRole("2"));
+                });
+
+                options.AddPolicy("SuperAdminPolicy", policy =>
+                {
+                    policy.RequireAssertion(context =>
+
+                        context.User.IsInRole("SuperAdmin") || context.User.IsInRole("2"));
+                });
             });
         }
     }
-
 }

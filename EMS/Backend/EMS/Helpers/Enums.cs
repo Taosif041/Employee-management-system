@@ -10,7 +10,9 @@
             Create,
             Update,
             Delete,
-            Authenticate
+            Authenticate,
+            AssignRole,
+            GetRole
         }
         public enum EntityName
         {
@@ -20,7 +22,8 @@
             Operation,
             Attendance,
             User,
-            RefreshToken
+            RefreshToken,
+            Role
         }
         public enum DatabaseType
         {

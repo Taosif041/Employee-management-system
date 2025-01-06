@@ -14,12 +14,14 @@ namespace EMS.Services.Implementations
         private readonly ILogger<LoginService> _logger;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
         private readonly ITokenService _tokenService;
+        private readonly IRoleRepository _roleRepository;
 
         public LoginService(
             ApiResultFactory apiResultFactory,
             ILoginRepository loginRepository,
             ILogger<LoginService> logger,
             IRefreshTokenRepository refreshTokenRepository,
+            IRoleRepository roleRepository,
             ITokenService tokenService
         )
         {
@@ -28,6 +30,7 @@ namespace EMS.Services.Implementations
             _logger = logger;
             _refreshTokenRepository = refreshTokenRepository;
             _tokenService = tokenService;
+            _roleRepository = roleRepository;
         }
         
         public async Task<ApiResult> LoginUserAsync(string userName, string plainPassword)
@@ -52,8 +55,11 @@ namespace EMS.Services.Implementations
                     return _apiResultFactory.CreateErrorResult(ErrorCode.INVALID_CREDENTIALS, ErrorMessage.INVALID_CREDENTIALS, ErrorLayer.Service);
                 }
 
-                var token = _tokenService.GenerateToken(userName);
+                var role = await _roleRepository.GetRoleByUserIdAsync(existingUser.Data.UserId);
+
+                var token = _tokenService.GenerateToken(userName, role.Data);
                 var refreshToken = _tokenService.GenerateRefreshToken();
+
 
                 var res = await _refreshTokenRepository.AddRefreshTokenAsyc(existingUser.Data.UserId, refreshToken);
 
@@ -101,11 +107,14 @@ namespace EMS.Services.Implementations
                     _logger.LogWarning("Token refresh failed. Refresh token {RefreshToken} is expired or invalid.", refreshToken);
                     return _apiResultFactory.CreateErrorResult(ErrorCode.SESSION_EXPIRED, ErrorMessage.SESSION_EXPIRED, ErrorLayer.Service);
                 }
-                Console.WriteLine($"resUserId.Data -> {resUserId.Data}");
 
                 var user = await _loginRepository.GetUserByIdAsync(resUserId.Data);
 
-                var newToken = _tokenService.GenerateToken(user.Data.UserName);
+
+                var role = await _roleRepository.GetRoleByUserIdAsync(resUserId.Data);
+
+
+                var newToken = _tokenService.GenerateToken(user.Data.UserName, role.Data);
                 var newRefreshToken = _tokenService.GenerateRefreshToken();
 
                 var res = await _refreshTokenRepository.UpdateRefreshTokenAsyc(resUserId.Data, newRefreshToken);

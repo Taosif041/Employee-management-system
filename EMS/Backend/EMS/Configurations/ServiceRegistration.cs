@@ -33,8 +33,11 @@ public static class ServiceRegistration
         services.AddScoped<ILoginRepository, LogInRepository>();
         services.AddScoped<ILoginService, LoginService>();
 
+        services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<IRoleService, RoleService>();
+
         services.AddScoped<ITokenService, TokenService>();
-        services.AddLogging();  // <-- Add this line
+        services.AddLogging();  
 
 
 

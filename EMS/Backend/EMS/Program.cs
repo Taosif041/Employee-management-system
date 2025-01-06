@@ -3,21 +3,17 @@ using EMS.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddApplicationServices();
-builder.Services.AddSwaggerServices(); // Register Swagger configuration
-builder.Services.AddCorsServices();    // Register CORS configuration
+builder.Services.AddSwaggerServices(); 
+builder.Services.AddCorsServices();    
 builder.Services.AddControllers();
 
-// Configure JwtSettings and JWT Authentication
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
-builder.Services.AddJwtAuthentication(builder.Configuration); // Add JWT Authentication
-builder.Services.AddAuthorizationPolicies(); // Add Authorization configuration
-
+builder.Services.AddJwtAuthentication(builder.Configuration); 
+builder.Services.AddAuthorizationPolicies(); 
 
 var app = builder.Build();
 
-// Use Swagger and SwaggerUI
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
