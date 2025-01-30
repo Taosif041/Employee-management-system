@@ -1,4 +1,6 @@
-﻿using EMS.EMS.Repositories.DatabaseProviders.Interfaces;
+﻿using EMS.DtoMapping.DTOs.Attendance;
+using EMS.DtoMapping.Mappers;
+using EMS.EMS.Repositories.DatabaseProviders.Interfaces;
 using EMS.Helpers;
 using EMS.Helpers.ErrorHelper;
 using EMS.Models;
@@ -42,11 +44,11 @@ namespace EMS.Services.Implementations
             }
         }
 
-        public async Task<ApiResult> GetAttendanceByEmployeeIdAndDateAsync(int employeeId, DateTime date)
+        public async Task<ApiResult> GetAttendanceByAttendanceId(int attendanceId)
         {
             try
             {
-                var result = await _attendanceRepository.GetAttendanceByIdAndDateAsync(employeeId, date);
+                var result = await _attendanceRepository.GetAttendanceByAttendanceId(attendanceId);
                 return result;
             }
             catch (Exception ex)
@@ -56,8 +58,9 @@ namespace EMS.Services.Implementations
             }
         }
 
-        public async Task<ApiResult> CreateAttendanceAsync(Attendance attendance)
+        public async Task<ApiResult> CreateAttendanceAsync(CreateAttendanceDto dto)
         {
+            Attendance attendance = dto.ToAttendance();
             try
             {
                 if (attendance == null)
@@ -75,10 +78,20 @@ namespace EMS.Services.Implementations
             }
         }
 
-        public async Task<ApiResult> UpdateAttendanceAsync(Attendance attendance)
+        public async Task<ApiResult> UpdateAttendanceAsync(int attendanceId, UpdateAttendanceDto dto)
         {
+            
             try
             {
+                var existingAttendance = await _attendanceRepository.GetAttendanceByAttendanceId(attendanceId);
+                if (existingAttendance.Data == null)
+                {
+                    return _apiResultFactory.CreateErrorResult(ErrorCode.NOT_FOUND_ERROR, 
+                        "Attendance record not found.", ErrorLayer.Service);
+                }
+                Attendance existingAttendanceEntity = existingAttendance.Data;
+
+                Attendance attendance = dto.ToAttendance(existingAttendanceEntity);
                 var result = await _attendanceRepository.UpdateAttendanceAsync(attendance);
                 return result;
             }
@@ -88,16 +101,16 @@ namespace EMS.Services.Implementations
             }
         }
 
-        public async Task<ApiResult> DeleteAttendanceAsync(int employeeId, DateTime date)
+        public async Task<ApiResult> DeleteAttendanceAsync(int attendanceId)
         {
             try
             {
-                if (employeeId <= 0 || date == default)
+                if (attendanceId == null)
                 {
                     return _apiResultFactory.CreateErrorResult(ErrorCode.BAD_REQUEST, ErrorMessage.VALIDATION_ERROR);
                 }
 
-                var deletionSuccess = await _attendanceRepository.DeleteAttendanceAsync(employeeId, date);
+                var deletionSuccess = await _attendanceRepository.DeleteAttendanceAsync(attendanceId);
 
                 return deletionSuccess;
             }
@@ -106,5 +119,7 @@ namespace EMS.Services.Implementations
                 return _apiResultFactory.CreateErrorResult(ErrorCode.INTERNAL_SERVER_ERROR, ErrorMessage.DELETE_ATTENDANCE_ERROR);
             }
         }
+
+        
     }
 }

@@ -10,6 +10,8 @@ nav ul {
   margin: 0;
   display: flex; /* Use flexbox for horizontal alignment */
   justify-content: center; /* Center the list items */
+  margin-left: 30%;
+  margin-right: 40px;
 }
 
 nav ul li {
@@ -47,4 +49,7 @@ nav ul li button::before {
 
 nav ul li button:hover::before {
   width: 100%; /* Extend underline on hover */
+}
+.logout {
+  margin-left: auto;
 }

@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { RouterModule } from '@angular/router';
 
 import { EmployeeComponent } from './components/employee/employee/employee.component';
 import { AttendanceComponent } from './components/attendance/attendance/attendance.component';
@@ -20,11 +19,20 @@ import { DemoButtonComponent } from './components/test/demo-button/demo-button.c
 import { InputComponent } from './components/test/input/input.component';
 import { ParentComponent } from './components/test/parent/parent.component';
 import { ChildComponent } from './components/test/child/child.component';
+import { LoginComponent } from './components/auth/login/login.component';
+import { SignupComponent } from './components/auth/signup/signup.component';
+import { AnimatedBoxComponent } from './animated-box/animated-box.component';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   { path: 'employee', component: EmployeeComponent },
   { path: 'employeeProfile/:id', component: EmployeeProfileComponent },
-  { path: 'createEmployee', component: CreateEmployeeComponent },
+  {
+    path: 'createEmployee',
+    component: CreateEmployeeComponent,
+    canActivate: [authGuard],
+    data: { roles: [1, 2] },
+  },
   { path: 'updateEmployee/:id', component: UpdateEmployeeComponent },
 
   { path: 'attendance', component: AttendanceComponent },
@@ -40,12 +48,16 @@ export const routes: Routes = [
   { path: 'createDesignation', component: CreateDesignationComponent },
   { path: 'updateDesignation/:id', component: UpdateDesignationComponent },
 
+  { path: 'login', component: LoginComponent },
+  { path: 'signup', component: SignupComponent },
+
   { path: 'log', component: LogComponent },
 
+  { path: 'anime', component: AnimatedBoxComponent },
   { path: 'demo', component: DemoButtonComponent },
   { path: 'input', component: InputComponent },
   { path: 'parent', component: ParentComponent },
   { path: 'child', component: ChildComponent },
 
-  { path: '', redirectTo: '/employee', pathMatch: 'full' },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
 ];

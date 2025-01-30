@@ -12,6 +12,7 @@ export class EmployeeService {
   employeeMap: { [key: number]: Employee } = {};
 
   constructor(private http: HttpClient) {}
+  private token: string | null = localStorage.getItem('auth_token');
 
   getAllEmployees(): Observable<Employee[]> {
     return this.http.get<Employee[]>(this.apiUrl);

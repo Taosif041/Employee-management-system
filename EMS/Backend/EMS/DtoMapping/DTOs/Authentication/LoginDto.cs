@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EMS.DTOs.Authentication
+namespace EMS.DtoMapping.DTOs.Authentication
 {
     public class LoginDto
     {

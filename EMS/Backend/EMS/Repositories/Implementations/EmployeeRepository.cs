@@ -4,12 +4,13 @@ using EMS.Models;
 using EMS.Repositories.Interfaces;
 using System.Data;
 using static EMS.Helpers.Enums;
-using EMS.DTOs.Employee;
+using EMS.DtoMapping.DTOs;
 using Employee = EMS.Models.Employee;
 using EMS.Helpers;
 using EMS.EMS.Repositories.DatabaseProviders.Interfaces;
 using EMS.EMS.Repositories.DatabaseProviders.Implementations;
 using EMS.Helpers.ErrorHelper;
+using EMS.DtoMapping;
 
 namespace EMS.Repositories.Implementations
 {
@@ -59,7 +60,6 @@ namespace EMS.Repositories.Implementations
                 {
                     var result = await connection.QueryFirstOrDefaultAsync<Employee>("GetEmployeeById", parameters, commandType: CommandType.StoredProcedure);
 
-                    var employeeDTO = EmployeeMapper.ToDTO(result);
 
                     await _operationLogger.LogOperationAsync(EntityName.Employee, employeeId, OperationType.GetById);
 
@@ -94,7 +94,7 @@ namespace EMS.Repositories.Implementations
 
                     employee.EmployeeId = newId;
 
-                    var employeeDTO = EmployeeMapper.ToDTO(employee);
+                    //var employeeDTO = EmployeeMapper.ToDTO(employee);
 
                     await _operationLogger.LogOperationAsync(EntityName.Employee, newId, OperationType.Create);
 
@@ -129,7 +129,7 @@ namespace EMS.Repositories.Implementations
 
                     await connection.ExecuteAsync("UpdateEmployeeInformation", parameters, commandType: CommandType.StoredProcedure);
 
-                    var employeeDTO = EmployeeMapper.ToDTO(employee);
+                    //var employeeDTO = EmployeeMapper.ToDTO(employee);
 
                     await _operationLogger.LogOperationAsync(EntityName.Employee, employee.EmployeeId, OperationType.Update);
 

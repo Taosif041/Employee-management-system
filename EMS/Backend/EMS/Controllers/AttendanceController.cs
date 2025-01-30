@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Text;
 using ClosedXML.Excel;
 using Microsoft.AspNetCore.Authorization;
+using EMS.DtoMapping.DTOs.Attendance;
 
 
 namespace EMS.Controllers
@@ -54,13 +55,13 @@ namespace EMS.Controllers
             }
         }
 
-        [HttpGet("{employeeId}/{date}")]
+        [HttpGet("{attendanceId}")]
         [Authorize(Policy = "UserPolicy")]
-        public async Task<IActionResult> GetAttendanceByEmployeeIdAndDateAsync(int employeeId, DateTime date)
+        public async Task<IActionResult> GetAttendanceByAttendanceId(int attendanceId)
         {
             try
             {
-                var result = await _attendanceService.GetAttendanceByEmployeeIdAndDateAsync(employeeId, date);
+                var result = await _attendanceService.GetAttendanceByAttendanceId(attendanceId);
 
                 if (result.IsSuccess) return Ok(result.Data);
 
@@ -74,16 +75,12 @@ namespace EMS.Controllers
 
         [HttpPost]
         [Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> CreateAttendance([FromBody] Attendance attendance)
+        public async Task<IActionResult> CreateAttendance([FromBody] CreateAttendanceDto dto)
         {
             try
             {
-                if (attendance == null)
-                {
-                    return StatusCode(500, _apiResultFactory.CreateErrorResult(ErrorCode.BAD_REQUEST, ErrorMessage.CREATE_ATTENDANCE_ERROR));
-                }
 
-                var result = await _attendanceService.CreateAttendanceAsync(attendance);
+                var result = await _attendanceService.CreateAttendanceAsync(dto);
 
                 if (result.IsSuccess) return Ok(result.Data);
 
@@ -96,14 +93,14 @@ namespace EMS.Controllers
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{attendanceId}")]
         [Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> UpdateAttendance([FromBody] Attendance attendance)
+        public async Task<IActionResult> UpdateAttendance(int attendanceId, [FromBody] UpdateAttendanceDto dto)
         {
             try
             {
 
-                var result = await _attendanceService.UpdateAttendanceAsync(attendance);
+                var result = await _attendanceService.UpdateAttendanceAsync(attendanceId,dto);
 
                 if (result.IsSuccess) return Ok(result.Data);
 
@@ -116,13 +113,13 @@ namespace EMS.Controllers
             }
         }
 
-        [HttpDelete("{employeeId}/{date}")]
+        [HttpDelete("attendanceId")]
         [Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> DeleteAttendance(int employeeId, DateTime date)
+        public async Task<IActionResult> DeleteAttendance(int attendanceId)
         {
             try
             {
-                var result = await _attendanceService.DeleteAttendanceAsync(employeeId, date);
+                var result = await _attendanceService.DeleteAttendanceAsync(attendanceId);
 
                 if (result.IsSuccess) return Ok(result);
 

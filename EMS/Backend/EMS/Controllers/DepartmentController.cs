@@ -1,6 +1,8 @@
-﻿using EMS.Helpers;
+﻿using EMS.DtoMapping.DTOs.DepartmentDTOs;
+using EMS.Helpers;
 using EMS.Helpers.ErrorHelper;
 using EMS.Models;
+using EMS.Models.DTOs;
 using EMS.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +33,7 @@ namespace EMS.Controllers
                 if (result.IsSuccess)
                     return Ok(result.Data);
 
-                return StatusCode((int)result.ErrorCode, result);
+                return StatusCode((int)result.ErrorCode, _apiResultFactory.CreateErrorResult((int)result.ErrorCode, result.ErrorMessage, result.ErrorLayer));
             }
             catch (Exception ex)
             {
@@ -52,7 +54,7 @@ namespace EMS.Controllers
                 if (result.IsSuccess)
                     return Ok(result.Data);
 
-                return StatusCode((int)result.ErrorCode, result);
+                return StatusCode((int)result.ErrorCode, _apiResultFactory.CreateErrorResult((int)result.ErrorCode, result.ErrorMessage, result.ErrorLayer));
 
             }
             catch (Exception ex)
@@ -65,16 +67,16 @@ namespace EMS.Controllers
 
         [HttpPost]
         [Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> CreateDepartmentAsync(Department department)
+        public async Task<IActionResult> CreateDepartmentAsync([FromBody] CreateDepartmentDto dto)
         {
             try
             {
-                var result = await _departmentService.CreateDepartmentAsync(department);
+                var result = await _departmentService.CreateDepartmentAsync(dto);
 
                 if (result.IsSuccess)
                     return Ok(result.Data);
 
-                return StatusCode((int)result.ErrorCode, result);
+                return StatusCode((int)result.ErrorCode, _apiResultFactory.CreateErrorResult((int)result.ErrorCode, result.ErrorMessage, result.ErrorLayer));
             }
             
             catch (Exception ex)
@@ -85,21 +87,17 @@ namespace EMS.Controllers
 
         [HttpPut("{departmentId}")]
         [Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> UpdateDepartmentAsync(int departmentId, Department department)
+        public async Task<IActionResult> UpdateDepartmentAsync(int departmentId, UpdateDepartmentDto dto)
         {
             try
             {
-                if (departmentId != department.DepartmentId)
-                {
-                    return BadRequest("Department ID mismatch.");
-                }
 
-                var result = await _departmentService.UpdateDepartmentAsync(department);
+                var result = await _departmentService.UpdateDepartmentAsync(departmentId, dto);
 
                 if (result.IsSuccess)
                     return Ok(result.Data);
 
-                return StatusCode((int)result.ErrorCode, result);
+                return StatusCode((int)result.ErrorCode, _apiResultFactory.CreateErrorResult((int)result.ErrorCode, result.ErrorMessage, result.ErrorLayer));
             }
             
             catch (Exception ex)
@@ -119,7 +117,7 @@ namespace EMS.Controllers
                 if (result.IsSuccess)
                     return Ok(result.Data);
 
-                return StatusCode((int)result.ErrorCode, result);
+                return StatusCode((int)result.ErrorCode, _apiResultFactory.CreateErrorResult((int)result.ErrorCode, result.ErrorMessage, result.ErrorLayer));
             }
             catch (Exception ex)
             {

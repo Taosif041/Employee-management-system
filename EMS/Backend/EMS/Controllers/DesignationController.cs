@@ -1,6 +1,7 @@
 ﻿using EMS.Helpers;
 using EMS.Helpers.ErrorHelper;
 using EMS.Models;
+using EMS.Models.DTOs;
 using EMS.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -62,11 +63,11 @@ namespace EMS.Controllers
 
         [HttpPost]
         [Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> CreateDesignationAsync([FromBody] Designation designation)
+        public async Task<IActionResult> CreateDesignationAsync([FromBody] CreateDesignationDto dto)
         {
             try
             {
-                var result = await _designationService.CreateDesignationAsync(designation);
+                var result = await _designationService.CreateDesignationAsync(dto);
 
                 if (result.IsSuccess) return Ok(result.Data);
 
@@ -83,11 +84,11 @@ namespace EMS.Controllers
 
         [HttpPut("{designationId}")]
         [Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> UpdateDesignationAsync(int designationId, [FromBody] Designation designation)
+        public async Task<IActionResult> UpdateDesignationAsync(int designationId, [FromBody] UpdateDesignationDto dto)
         {
             try
             {
-                var result = await _designationService.UpdateDesignationAsync(designation);
+                var result = await _designationService.UpdateDesignationAsync(designationId, dto);
 
                 if (result.IsSuccess) return Ok(result.Data);
 

@@ -1,4 +1,6 @@
-﻿using EMS.Models;
+﻿using EMS.DtoMapping.DTOs.DepartmentDTOs;
+using EMS.Models;
+using EMS.Models.DTOs;
 
 namespace EMS.Services.Interfaces
 {
@@ -6,8 +8,8 @@ namespace EMS.Services.Interfaces
     {
         Task<ApiResult> GetAllDepartmentsAsync();
         Task<ApiResult> GetDepartmentByIdAsync(int departmentId);
-        Task<ApiResult> CreateDepartmentAsync(Department department);
-        Task<ApiResult> UpdateDepartmentAsync(Department department);
+        Task<ApiResult> CreateDepartmentAsync(CreateDepartmentDto dto);
+        Task<ApiResult> UpdateDepartmentAsync(int departmentId, UpdateDepartmentDto dto);
         Task<ApiResult> DeleteDepartmentAsync(int departmentId);
 
     }

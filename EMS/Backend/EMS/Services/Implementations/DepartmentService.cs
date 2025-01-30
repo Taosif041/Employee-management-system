@@ -1,6 +1,9 @@
-﻿using EMS.Helpers;
+﻿using EMS.DtoMapping.DTOs.DepartmentDTOs;
+using EMS.DtoMapping.Mappers;
+using EMS.Helpers;
 using EMS.Helpers.ErrorHelper;
 using EMS.Models;
+using EMS.Models.DTOs;
 using EMS.Repositories.Interfaces;
 using EMS.Services.Interfaces;
 using System;
@@ -46,8 +49,9 @@ namespace EMS.Services.Implementations
             }
         }
 
-        public async Task<ApiResult> CreateDepartmentAsync(Department department)
+        public async Task<ApiResult> CreateDepartmentAsync(CreateDepartmentDto dto)
         {
+            Department department = dto.ToDepartment();
             try
             {
                 if (department == null)
@@ -64,8 +68,9 @@ namespace EMS.Services.Implementations
             }
         }
 
-        public async Task<ApiResult> UpdateDepartmentAsync(Department department)
+        public async Task<ApiResult> UpdateDepartmentAsync(int departmentId, UpdateDepartmentDto dto)
         {
+            Department department = dto.ToDepartment(departmentId);
             try
             {
                 if (department == null)

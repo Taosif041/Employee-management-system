@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using ClosedXML.Excel;
 using Microsoft.AspNetCore.Authorization;
+using EMS.DtoMapping.DTOs.EmployeeDTOs;
 
 
 namespace EMS.Controllers
@@ -67,11 +68,11 @@ namespace EMS.Controllers
 
         [HttpPost]
         [Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> CreateEmployee(Employee employee)
+        public async Task<IActionResult> CreateEmployee([FromBody] CreateEmployeeDto dto)
         {
             try
             {
-                var result = await _employeeService.CreateEmployeeAsync(employee);
+                var result = await _employeeService.CreateEmployeeAsync(dto);
                 if (result.IsSuccess)
                     return Ok(result.Data);
 
@@ -85,16 +86,12 @@ namespace EMS.Controllers
 
         [HttpPut("{employeeId}")]
         [Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> UpdateEmployee(int employeeId, Employee employee)
+        public async Task<IActionResult> UpdateEmployee(int employeeId, [FromBody] UpdateEmployeeDto dto)
         {
             try
             {
-                if (employeeId != employee.EmployeeId)
-                {
-                    return StatusCode(400, _apiResultFactory.CreateErrorResult(ErrorCode.BAD_REQUEST, ErrorMessage.UPDATE_EMPLOYEE_ERROR, ErrorLayer.Controller));
-                }
 
-                var result = await _employeeService.UpdateEmployeeInformationAsync(employee);
+                var result = await _employeeService.UpdateEmployeeInformationAsync(employeeId, dto);
 
                 if (result.IsSuccess)
                     return Ok(result.Data);

@@ -9,9 +9,9 @@
                 options.AddPolicy("AllowAngularApp", policy =>
                 {
                     policy.WithOrigins("http://localhost:4200") 
-                        .AllowAnyHeader()                       // Allow any headers
-                        .AllowAnyMethod()                       // Allow any HTTP methods (GET, POST, PUT, DELETE, etc.)
-                        .AllowCredentials();                    // Allow credentials (cookies, authorization headers, etc.)
+                        .AllowAnyHeader()                       
+                        .AllowAnyMethod()                       
+                        .AllowCredentials();                   
                 });
             });
         }

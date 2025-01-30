@@ -30,6 +30,7 @@ namespace EMS.Repositories.Implementations
             _operationLogger = new OperationLogger(_operationLogRepository);
         }
 
+
         public async Task<ApiResult> AssignRoleToUserIdAsync(int userId, int role)
         {
             using (IDbConnection connection = _databaseFactory.CreateSqlServerConnection())

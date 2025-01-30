@@ -1,4 +1,6 @@
 ﻿using EMS.Models;
+using EMS.Models.DTOs;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,8 +10,8 @@ namespace EMS.Services.Interfaces
     {
         Task<ApiResult> GetAllDesignationsAsync();
         Task<ApiResult> GetDesignationByIdAsync(int designationId);
-        Task<ApiResult> CreateDesignationAsync(Designation designation);
-        Task<ApiResult> UpdateDesignationAsync(Designation designation);
+        Task<ApiResult> CreateDesignationAsync(CreateDesignationDto dto);
+        Task<ApiResult> UpdateDesignationAsync(int designationId, UpdateDesignationDto dto);
         Task<ApiResult> DeleteDesignationAsync(int designationId);
     }
 }

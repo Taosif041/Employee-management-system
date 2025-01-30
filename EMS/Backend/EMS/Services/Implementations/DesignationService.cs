@@ -1,6 +1,8 @@
 ﻿using EMS.Helpers;
 using EMS.Helpers.ErrorHelper;
+using EMS.Helpers.Mappers;
 using EMS.Models;
+using EMS.Models.DTOs;
 using EMS.Repositories.Interfaces;
 using EMS.Services.Interfaces;
 using System;
@@ -46,8 +48,9 @@ namespace EMS.Services.Implementations
             }
         }
 
-        public async Task<ApiResult> CreateDesignationAsync(Designation designation)
+        public async Task<ApiResult> CreateDesignationAsync(CreateDesignationDto dto)
         {
+            Designation designation = dto.ToDesignation();
             try
             {
                 if (designation == null)
@@ -64,8 +67,9 @@ namespace EMS.Services.Implementations
             }
         }
 
-        public async Task<ApiResult> UpdateDesignationAsync(Designation designation)
+        public async Task<ApiResult> UpdateDesignationAsync(int designationId, UpdateDesignationDto dto)
         {
+            Designation designation = dto.ToDesignation(designationId);
             try
             {
                 if (designation == null)
@@ -91,7 +95,8 @@ namespace EMS.Services.Implementations
                     return _apiResultFactory.CreateErrorResult(ErrorCode.BAD_REQUEST, "Designation cannot be null.");
                 }
 
-                return await _designationRepository.DeleteDesignationAsync(designationId);
+                var result = await _designationRepository.DeleteDesignationAsync(designationId);
+                return result;
             }
             catch (Exception ex)
             {

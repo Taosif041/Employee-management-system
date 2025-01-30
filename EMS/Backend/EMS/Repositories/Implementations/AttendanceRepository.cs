@@ -58,22 +58,20 @@ namespace EMS.Repositories.Implementations
 
         }
 
-        public async Task<ApiResult> GetAttendanceByIdAndDateAsync(int employeeId, DateTime date)
+        public async Task<ApiResult> GetAttendanceByAttendanceId(int attendanceId)
         {
             using (IDbConnection connection = _databaseFactory.CreatePostgresSqlConnection())
             {
+                
                 try
                 {
-                    string formattedDate = date.ToString("yyyy-MM-dd");
 
+                    var query = "SELECT * FROM get_attendance_by_id(@attendanceId)";
+                    var parameters = new { AttendanceId = attendanceId  };
 
+                var result = await connection.QueryFirstOrDefaultAsync<Attendance>(query, parameters);
 
-                    var query = "SELECT * FROM get_attendance_by_id_and_date(@EmployeeId, @Date::DATE)";
-                    var parameters = new { EmployeeId = employeeId, Date = formattedDate };
-
-                    var result = await connection.QueryFirstOrDefaultAsync<Attendance>(query, parameters);
-
-                    await _operationLogger.LogOperationAsync(EntityName.Attendance, employeeId, OperationType.GetById);
+                    await _operationLogger.LogOperationAsync(EntityName.Attendance, attendanceId, OperationType.GetById);
 
                     return _apiResultFactory.CreateSuccessResult(result);
                 }
@@ -124,7 +122,7 @@ namespace EMS.Repositories.Implementations
 
                 try
                 {
-                    var currentAttendance = await GetAttendanceByIdAndDateAsync(attendance.EmployeeId, attendance.Date);
+                    var currentAttendance = await GetAttendanceByAttendanceId(attendance.AttendanceId);
 
                     var parameters = new
                     {
@@ -154,20 +152,19 @@ namespace EMS.Repositories.Implementations
         }
 
 
-        public async Task<ApiResult> DeleteAttendanceAsync(int employeeId, DateTime date)
+        public async Task<ApiResult> DeleteAttendanceAsync(int attendanceId)
         {
             using (IDbConnection connection = _databaseFactory.CreatePostgresSqlConnection())
             {
                 try
                 {
-                    string formattedDate = date.ToString("yyyy-MM-dd");
 
-                    var query = "SELECT * FROM get_attendance_by_id_and_date(@EmployeeId, @Date::DATE)";
-                    var parameters = new { EmployeeId = employeeId, Date = formattedDate };
+                    var query = "SELECT * FROM delete_attendance_by_id(@attendanceId)";
+                    var parameters = new { AttendanceId = attendanceId };
 
                     var result = await connection.ExecuteScalarAsync<bool>(query, parameters);
 
-                    await _operationLogger.LogOperationAsync(EntityName.Attendance, employeeId, OperationType.Delete);
+                    await _operationLogger.LogOperationAsync(EntityName.Attendance, attendanceId, OperationType.Delete);
 
                     return _apiResultFactory.CreateSuccessResult(result);
                 }

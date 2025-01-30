@@ -7,7 +7,7 @@ import { Attendance } from '../../models/attendance.model';
   providedIn: 'root',
 })
 export class AttendanceService {
-  private apiUrl = 'http://localhost:5000/api/Attendance'; // Replace with your actual API URL
+  private apiUrl = 'http://localhost:5000/api/Attendance';
 
   constructor(private http: HttpClient) {}
 

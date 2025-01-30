@@ -13,7 +13,7 @@ namespace EMS.Configurations
                 {
                     Title = "EMS API",
                     Version = "v1",
-                    Description = "An API for managing employees, departments, and designations."
+                    Description = "An API for managing employees."
                 });
 
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

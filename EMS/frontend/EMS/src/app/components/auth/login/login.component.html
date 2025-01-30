@@ -1,0 +1,25 @@
+<div class="login-container">
+  <div class="input-container">
+    <label for="username">Username</label>
+    <input
+      id="username"
+      type="text"
+      placeholder="Enter your username"
+      [(ngModel)]="username"
+      required
+    />
+  </div>
+
+  <div class="input-container">
+    <label for="password">Password</label>
+    <input
+      id="password"
+      type="password"
+      placeholder="Enter your password"
+      [(ngModel)]="password"
+      required
+    />
+  </div>
+
+  <button mat-flat-button (click)="login()">Login</button>
+</div>

@@ -1,4 +1,4 @@
-﻿using EMS.DTOs.Authentication;
+﻿using EMS.DtoMapping.DTOs.Authentication;
 using EMS.Helpers;
 using EMS.Helpers.ErrorHelper;
 using EMS.Models;
@@ -105,7 +105,7 @@ namespace EMS.Controllers
         }
 
         [HttpPost("refresh")]
-        public async Task<IActionResult> Refresh([FromBody] string refreshToken)
+        public async Task<IActionResult> Refresh(string refreshToken)
         {
             try
             {
@@ -133,7 +133,7 @@ namespace EMS.Controllers
         }
 
         [HttpPost("logout")]
-        public async Task<IActionResult> LogOut([FromBody] int userId)
+        public async Task<IActionResult> LogOut(int userId)
         {
             try
             {
